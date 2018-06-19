@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 8.5" name="POSUL">
+  <DataContextMoniker Name="/POSULDataContext" />
+  <nestedChildShapes>
+    <classShape Id="f95c1801-6375-449c-9ec6-249f03044e6e" absoluteBounds="1.25, 1.375, 2, 1.9631982421875">
+      <DataClassMoniker Name="/POSULDataContext/POS_UL" />
+      <nestedChildShapes>
+        <elementListCompartment Id="d5e3cd21-c69f-4db7-b9cf-f70da5993e25" absoluteBounds="1.2650000000000001, 1.835, 1.9700000000000002, 1.4031982421875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+  </nestedChildShapes>
+</ordesignerObjectsDiagram>

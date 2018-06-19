@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 14.5" name="CMD">
+  <DataContextMoniker Name="/CMDDataContext" />
+  <nestedChildShapes>
+    <classShape Id="2a5fbf8b-1800-40d9-b9ca-fed65a6b3367" absoluteBounds="3.5, 5.875, 2, 7.9245426432291639">
+      <DataClassMoniker Name="/CMDDataContext/POS_PI" />
+      <nestedChildShapes>
+        <elementListCompartment Id="6563ac68-9e93-4de2-b6cf-d6314bf156eb" absoluteBounds="3.515, 6.335, 1.9700000000000002, 7.3645426432291661" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="19c5a29d-85c9-4862-acf1-a068437d9701" absoluteBounds="0.75, 1.5, 2, 12.732078450520834">
+      <DataClassMoniker Name="/CMDDataContext/POS_PT" />
+      <nestedChildShapes>
+        <elementListCompartment Id="78ddc758-74f8-46c3-92e5-f5523fb8908d" absoluteBounds="0.765, 1.96, 1.9700000000000002, 12.172078450520832" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="a7a98d21-79bf-434d-96b1-0b4c67db07a1" absoluteBounds="3.5, 1.875, 2, 3.3093082682291666">
+      <DataClassMoniker Name="/CMDDataContext/POS_PT_PR" />
+      <nestedChildShapes>
+        <elementListCompartment Id="bf63dea1-8511-4c2d-9a61-69fb61650d46" absoluteBounds="3.515, 2.335, 1.9700000000000002, 2.7493082682291665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(2.75 : 9.83727132161458); (3.5 : 9.83727132161458)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/CMDDataContext/POS_PT/POS_PT_POS_PI" />
+      <nodes>
+        <classShapeMoniker Id="19c5a29d-85c9-4862-acf1-a068437d9701" />
+        <classShapeMoniker Id="2a5fbf8b-1800-40d9-b9ca-fed65a6b3367" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(2.75 : 3.52965413411458); (3.5 : 3.52965413411458)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/CMDDataContext/POS_PT/POS_PT_POS_PT_PR" />
+      <nodes>
+        <classShapeMoniker Id="19c5a29d-85c9-4862-acf1-a068437d9701" />
+        <classShapeMoniker Id="a7a98d21-79bf-434d-96b1-0b4c67db07a1" />
+      </nodes>
+    </associationConnector>
+    <classShape Id="208afbef-10fe-4bad-9e46-adfe42614baa" absoluteBounds="6.375, 2.5, 2, 1.9631982421875">
+      <DataClassMoniker Name="/CMDDataContext/PV_POS_UL" />
+      <nestedChildShapes>
+        <elementListCompartment Id="841081cb-d7fe-4df7-be3f-39db727465dc" absoluteBounds="6.3900000000000006, 2.96, 1.9700000000000002, 1.4031982421875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+  </nestedChildShapes>
+</ordesignerObjectsDiagram>
