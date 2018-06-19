@@ -90,35 +90,45 @@ namespace EndOfDays
             
             DateTime dt = DateTime.Now;
 
-            var Rs = cmd.PF_GET_SALES().FirstOrDefault();
-
-            decimal decSend = Convert.ToDecimal(Rs.Ycnt);
-            decimal decNone = Convert.ToDecimal(Rs.Ncnt);
-
-             lblNone.Text = decNone.ToString("#,##0") == 0.ToString() ? "-" : decNone.ToString("#,##0");
-            lblSend.Text = decSend.ToString("#,##0") == 0.ToString() ?"-":decSend.ToString("#,##0");
-
-            var data = cmd.PV_None_Syncs.ToList();
-
-            lv.Items.Clear();
-            ListViewItem LvItm = new ListViewItem();
-
-           
-                    //Dim idx As Integer = lv_comm.Items.IndexOf(LvItm)
-
-            foreach (var item in data)
+            if (insPosUL() == true)
             {
-                LvItm = lv.Items.Add(item.rw.ToString());
-                int idx = lv.Items.IndexOf(LvItm);
-                lv.Items[idx].SubItems.Add(item.whcode);
-                lv.Items[idx].SubItems.Add(item.ABBNAME);
-                lv.Items[idx].SubItems.Add(item.ABBNO);
-                lv.Items[idx].SubItems.Add(item.TMCODE);
-                lv.Items[idx].SubItems.Add(item.WORKDATE);
-                lv.Items[idx].SubItems.Add(Convert.ToDecimal(item.NET).ToString("#,##0.00"));
+                var Rs = cmd.PF_GET_SALES().FirstOrDefault();
+
+                if (Rs == null)
+                {
+                    lv.Items.Clear();
+                    lblNone.Text = "-";
+                    lblSend.Text = "-";
+                }
+                else
+                {
+                    decimal decSend = Convert.ToDecimal(Rs.Ycnt);
+                    decimal decNone = Convert.ToDecimal(Rs.Ncnt);
+
+                    lblNone.Text = decNone.ToString("#,##0") == 0.ToString() ? "-" : decNone.ToString("#,##0");
+                    lblSend.Text = decSend.ToString("#,##0") == 0.ToString() ? "-" : decSend.ToString("#,##0");
+
+
+                }
+
+                var data = cmd.PV_None_Syncs.ToList();
+
+                lv.Items.Clear();
+                ListViewItem LvItm = new ListViewItem();
+
+                foreach (var item in data)
+                {
+                    LvItm = lv.Items.Add(item.rw.ToString());
+                    int idx = lv.Items.IndexOf(LvItm);
+                    lv.Items[idx].SubItems.Add(item.whcode);
+                    lv.Items[idx].SubItems.Add(item.ABBNAME);
+                    lv.Items[idx].SubItems.Add(item.ABBNO);
+                    lv.Items[idx].SubItems.Add(item.TMCODE);
+                    lv.Items[idx].SubItems.Add(item.WORKDATE);
+                    lv.Items[idx].SubItems.Add(Convert.ToDecimal(item.NET).ToString("#,##0.00"));
+                }
             }
-
-
+            
         }
 
         private void btnSend_Click(object sender, EventArgs e)
@@ -129,8 +139,15 @@ namespace EndOfDays
                 ListPI = new List<POSPIS>();
                 ListPTPR = new List<POSPTPRS>();
 
-                autoSend();
-                loadData();
+                if (lv.Items.Count > 0)
+                {
+                    autoSend();
+                    loadData();
+                }
+                else
+                {
+                    MessageBox.Show("ไม่มีบิลคงค้าง");
+                }
 
             }
             catch (Exception ex)
@@ -145,16 +162,21 @@ namespace EndOfDays
             {
                 using (var client = new HttpClient())
                 {
-
-                    client.BaseAddress = new Uri("http://5cosmeda.homeunix.com:89/ApiFromPOS/");
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                    var response = client.PostAsJsonAsync("api/POS/InsertBill", ListPOS).Result;
-                    if (response.IsSuccessStatusCode)
-                    {
-                        upPosUL();
-                        MessageBox.Show("สำเร็จ");
-                    }
                     
+                        client.BaseAddress = new Uri("http://5cosmeda.homeunix.com:89/ApiFromPOS/");
+                        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                        var response = client.PostAsJsonAsync("api/POS/InsertBill", ListPOS).Result;
+                        if (response.IsSuccessStatusCode)
+                        {
+                            upPosUL();
+                            MessageBox.Show("สำเร็จ");
+                        }
+                        else
+                        {
+                            MessageBox.Show(response.StatusCode.ToString());
+                        }
+                   
+
                 }
             }
 
@@ -163,7 +185,6 @@ namespace EndOfDays
         private bool getABBNO()
         {
             bool bl = false;
-
 
             try
             {
@@ -185,7 +206,8 @@ namespace EndOfDays
                 }
 
 
-                var bill_rs = sup.POS_ULs.Where(s => s.UFLAG == "N" && s.ABBNO == "10685").ToList();
+                //var bill_rs = sup.POS_ULs.Where(s => s.UFLAG == "N" &&( s.ABBNO == "10789" ) ).ToList();
+                var bill_rs = sup.POS_ULs.Where(s => s.UFLAG == "N" ).ToList();
 
                 foreach (var item in bill_rs)
                 {
@@ -349,7 +371,41 @@ namespace EndOfDays
 
             POS pos = new POS { POSPT = pt, POSPI = ListPI, POSPTPR = ListPTPR, CREATEBY = Stcode,ENDDAY = "Y" };
             ListPOS.Add(pos);
+           
 
+        }
+
+        private bool insPosUL()
+        {
+            bool bl = false;
+            try
+            {
+
+                var result = cmd.PV_POS_ULs.ToList();
+
+                foreach (var item in result)
+                {
+                    POS_UL ul = new POS_UL();
+                    ul.WH_ID = item.WH_ID;
+                    ul.ABBNO = item.ABBNO;
+                    ul.PTDATE = item.PTDATE;
+                    ul.WORKDATE = item.WORKDATE;
+                    ul.TMCODE = item.TMCODE;
+                    ul.UFLAG = "N";
+
+                    sup.POS_ULs.InsertOnSubmit(ul);
+                    sup.SubmitChanges();
+
+                    
+                }
+                bl = true;
+            }
+            catch (Exception ex)
+            {
+                bl = false;
+                MessageBox.Show(ex.Message);
+            }
+            return bl;
         }
 
         private void upPosUL()
