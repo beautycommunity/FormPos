@@ -27,8 +27,8 @@ namespace AutoPos
         string Whcode;
 
         List<POS> ListPOS = new List<POS>();
-        List<POSPIS> ListPI = new List<POSPIS>();
-        List<POSPTPRS> ListPTPR = new List<POSPTPRS>();
+        //List<POSPIS> ListPI = new List<POSPIS>();
+        //List<POSPTPRS> ListPTPR = new List<POSPTPRS>();
 
 
         CMDDataContext cmd = new CMDDataContext();
@@ -77,11 +77,14 @@ namespace AutoPos
             {
                 using (var client = new HttpClient())
                 {
-
+                    int sms = 0;
                     client.BaseAddress = new Uri("http://5cosmeda.homeunix.com:89/ApiFromPOS/");
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                     var response = client.PostAsJsonAsync("api/POS/InsertBill", ListPOS).Result;
-                    if (response.IsSuccessStatusCode)
+                    var details = JObject.Parse(response.Content.ReadAsStringAsync().Result);
+
+                    sms = Convert.ToInt32(details["Results"]["Statuscode"]);
+                    if (sms == 1)
                     {
                         upPosUL();
                         uplog(Whcode,"ok");
@@ -150,6 +153,9 @@ namespace AutoPos
             var sql_pi = cmd.POS_PIs.Where(s => s.WH_ID == _wh_id && s.WORKDATE == _workdate && s.TMCODE == _tmcode && s.ABBNO == _abbno).ToList();
 
             var sql_pr = cmd.POS_PT_PRs.Where(s => s.WH_ID == _wh_id && s.WORKDATE == _workdate && s.TMCODE == _tmcode && s.ABBNO == _abbno).ToList();
+
+            List<POSPIS> ListPI = new List<POSPIS>();
+            List<POSPTPRS> ListPTPR = new List<POSPTPRS>();
 
             POSPTS pt = new POSPTS
                 {
@@ -300,7 +306,7 @@ namespace AutoPos
                 ntf.Visible = true;
                 ntf.BalloonTipTitle = "POS SYNC";
                 ntf.BalloonTipText = "POS SYNC";
-                ntf.ShowBalloonTip(100);
+                ntf.ShowBalloonTip(50);
             }
             catch (Exception ex)
             {
@@ -313,6 +319,7 @@ namespace AutoPos
             Show();
             this.WindowState = FormWindowState.Normal;
             ntf.Visible = false;
+            this.ShowInTaskbar = true;
         }
 
         private void frmMain_Resize(object sender, EventArgs e)
@@ -321,6 +328,7 @@ namespace AutoPos
             {
                 Hide();
                 ntf.Visible = true;
+                this.ShowInTaskbar = false;
             }
         }
 
