@@ -3229,6 +3229,8 @@ namespace EndOfDays
 		
 		private System.Nullable<decimal> _NET;
 		
+		private string _ptstatus;
+		
 		public PV_None_Sync()
 		{
 		}
@@ -3341,6 +3343,22 @@ namespace EndOfDays
 				if ((this._NET != value))
 				{
 					this._NET = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ptstatus", DbType="VarChar(9)")]
+		public string ptstatus
+		{
+			get
+			{
+				return this._ptstatus;
+			}
+			set
+			{
+				if ((this._ptstatus != value))
+				{
+					this._ptstatus = value;
 				}
 			}
 		}

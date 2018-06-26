@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.btnSend = new System.Windows.Forms.Button();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.lblSend = new System.Windows.Forms.Label();
             this.lv = new System.Windows.Forms.ListView();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -37,35 +37,38 @@
             this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.lblSend = new System.Windows.Forms.Label();
             this.lblNone = new System.Windows.Forms.Label();
-            this.groupBox2.SuspendLayout();
+            this.columnHeader8 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox1.SuspendLayout();
+            this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnSend
             // 
-            this.btnSend.Font = new System.Drawing.Font("Tahoma", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(222)));
-            this.btnSend.Location = new System.Drawing.Point(901, 485);
+            this.btnSend.Font = new System.Drawing.Font("Tahoma", 25.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(222)));
+            this.btnSend.Location = new System.Drawing.Point(838, 431);
             this.btnSend.Name = "btnSend";
-            this.btnSend.Size = new System.Drawing.Size(303, 144);
+            this.btnSend.Size = new System.Drawing.Size(296, 72);
             this.btnSend.TabIndex = 8;
             this.btnSend.Text = "รับส่งบิลคงค้าง";
             this.btnSend.UseVisualStyleBackColor = true;
             this.btnSend.Click += new System.EventHandler(this.btnSend_Click);
             // 
-            // groupBox2
+            // lblSend
             // 
-            this.groupBox2.Controls.Add(this.lblSend);
-            this.groupBox2.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(222)));
-            this.groupBox2.Location = new System.Drawing.Point(868, 39);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(368, 200);
-            this.groupBox2.TabIndex = 12;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "จำนวนบิลที่ส่งแล้ว";
+            this.lblSend.BackColor = System.Drawing.SystemColors.Control;
+            this.lblSend.Font = new System.Drawing.Font("Tahoma", 72F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(222)));
+            this.lblSend.ForeColor = System.Drawing.Color.DarkSeaGreen;
+            this.lblSend.Location = new System.Drawing.Point(6, 36);
+            this.lblSend.Name = "lblSend";
+            this.lblSend.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.lblSend.Size = new System.Drawing.Size(291, 122);
+            this.lblSend.TabIndex = 2;
+            this.lblSend.Text = "199";
+            this.lblSend.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // lv
             // 
@@ -78,7 +81,8 @@
             this.columnHeader4,
             this.columnHeader5,
             this.columnHeader6,
-            this.columnHeader7});
+            this.columnHeader7,
+            this.columnHeader8});
             this.lv.FullRowSelect = true;
             this.lv.GridLines = true;
             this.lv.Location = new System.Drawing.Point(12, 42);
@@ -96,79 +100,87 @@
             // 
             this.columnHeader2.Text = "รหัสสาขา";
             this.columnHeader2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.columnHeader2.Width = 130;
+            this.columnHeader2.Width = 100;
             // 
             // columnHeader3
             // 
             this.columnHeader3.Text = "สาขา";
             this.columnHeader3.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.columnHeader3.Width = 140;
+            this.columnHeader3.Width = 120;
             // 
             // columnHeader4
             // 
             this.columnHeader4.Text = "เลขที่บิล";
             this.columnHeader4.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.columnHeader4.Width = 100;
+            this.columnHeader4.Width = 90;
             // 
             // columnHeader5
             // 
             this.columnHeader5.Text = "จุดขาย";
             this.columnHeader5.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.columnHeader5.Width = 100;
+            this.columnHeader5.Width = 90;
             // 
             // columnHeader6
             // 
             this.columnHeader6.Text = "วันที่ขาย";
             this.columnHeader6.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.columnHeader6.Width = 120;
-            // 
-            // groupBox1
-            // 
-            this.groupBox1.Controls.Add(this.lblNone);
-            this.groupBox1.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(222)));
-            this.groupBox1.Location = new System.Drawing.Point(868, 250);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(368, 200);
-            this.groupBox1.TabIndex = 187;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "จำนวนบิลที่ยังไม่ส่ง";
+            this.columnHeader6.Width = 110;
             // 
             // columnHeader7
             // 
-            this.columnHeader7.Text = "ยอด";
-            this.columnHeader7.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.columnHeader7.Width = 120;
-            // 
-            // lblSend
-            // 
-            this.lblSend.Font = new System.Drawing.Font("Tahoma", 48F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(222)));
-            this.lblSend.Location = new System.Drawing.Point(6, 53);
-            this.lblSend.Name = "lblSend";
-            this.lblSend.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.lblSend.Size = new System.Drawing.Size(356, 97);
-            this.lblSend.TabIndex = 2;
-            this.lblSend.Text = "label1";
+            this.columnHeader7.Text = "สถานะ";
+            this.columnHeader7.Width = 100;
             // 
             // lblNone
             // 
-            this.lblNone.Font = new System.Drawing.Font("Tahoma", 48F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(222)));
+            this.lblNone.Font = new System.Drawing.Font("Tahoma", 72F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(222)));
             this.lblNone.ForeColor = System.Drawing.Color.Red;
-            this.lblNone.Location = new System.Drawing.Point(6, 52);
+            this.lblNone.Location = new System.Drawing.Point(6, 36);
             this.lblNone.Name = "lblNone";
             this.lblNone.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.lblNone.Size = new System.Drawing.Size(356, 97);
+            this.lblNone.Size = new System.Drawing.Size(291, 127);
             this.lblNone.TabIndex = 3;
-            this.lblNone.Text = "label1";
+            this.lblNone.Text = "999";
+            this.lblNone.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // columnHeader8
+            // 
+            this.columnHeader8.Text = "ยอด";
+            this.columnHeader8.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.columnHeader8.Width = 100;
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.lblSend);
+            this.groupBox1.Font = new System.Drawing.Font("Tahoma", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(222)));
+            this.groupBox1.ForeColor = System.Drawing.Color.DarkSeaGreen;
+            this.groupBox1.Location = new System.Drawing.Point(832, 42);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(302, 166);
+            this.groupBox1.TabIndex = 187;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "บิลที่ส่งแล้ว";
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.lblNone);
+            this.groupBox2.Font = new System.Drawing.Font("Tahoma", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(222)));
+            this.groupBox2.ForeColor = System.Drawing.Color.Red;
+            this.groupBox2.Location = new System.Drawing.Point(832, 231);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(302, 166);
+            this.groupBox2.TabIndex = 188;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "บิลคงค้าง";
             // 
             // frmEOD
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.AutoScroll = true;
             this.ClientSize = new System.Drawing.Size(1262, 653);
+            this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.btnSend);
             this.Controls.Add(this.lv);
-            this.Controls.Add(this.groupBox2);
             this.kBtnConditionVisible = false;
             this.kBtnExportCsvVisible = false;
             this.kBtnExportExcelVisible = false;
@@ -178,12 +190,12 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "สรุปสิ้นวัน";
             this.Load += new System.EventHandler(this.frmEOD_Load);
-            this.Controls.SetChildIndex(this.groupBox2, 0);
             this.Controls.SetChildIndex(this.lv, 0);
             this.Controls.SetChildIndex(this.btnSend, 0);
             this.Controls.SetChildIndex(this.groupBox1, 0);
-            this.groupBox2.ResumeLayout(false);
+            this.Controls.SetChildIndex(this.groupBox2, 0);
             this.groupBox1.ResumeLayout(false);
+            this.groupBox2.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -191,7 +203,6 @@
 
         #endregion
         private System.Windows.Forms.Button btnSend;
-        private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.ListView lv;
         private System.Windows.Forms.ColumnHeader columnHeader1;
         private System.Windows.Forms.ColumnHeader columnHeader2;
@@ -199,10 +210,12 @@
         private System.Windows.Forms.ColumnHeader columnHeader4;
         private System.Windows.Forms.ColumnHeader columnHeader5;
         private System.Windows.Forms.ColumnHeader columnHeader6;
-        private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.ColumnHeader columnHeader7;
         private System.Windows.Forms.Label lblSend;
         private System.Windows.Forms.Label lblNone;
+        private System.Windows.Forms.ColumnHeader columnHeader8;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.GroupBox groupBox2;
     }
 }
 

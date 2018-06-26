@@ -14,6 +14,9 @@ using System.IO;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using System.Globalization;
+using Newtonsoft.Json;
+using RestSharp;
+using RestSharp.Deserializers;
 
 namespace EndOfDays
 {
@@ -25,10 +28,10 @@ namespace EndOfDays
         string Stcode;
         CultureInfo us = CultureInfo.GetCultureInfo("en-US");
 
-        List<POS> ListPOS;
-        List<POSPIS> ListPI;
-        List<POSPTPRS> ListPTPR;
-
+        //List<POS> ListPOS;
+        //List<POSPIS> ListPI;
+        //List<POSPTPRS> ListPTPR;
+        List<POS> ListPOS = new List<POS>();
 
         CMDDataContext cmd = new CMDDataContext();
         POSULDataContext sup = new POSULDataContext();
@@ -125,6 +128,7 @@ namespace EndOfDays
                     lv.Items[idx].SubItems.Add(item.ABBNO);
                     lv.Items[idx].SubItems.Add(item.TMCODE);
                     lv.Items[idx].SubItems.Add(item.WORKDATE);
+                    lv.Items[idx].SubItems.Add(item.ptstatus);
                     lv.Items[idx].SubItems.Add(Convert.ToDecimal(item.NET).ToString("#,##0.00"));
                 }
             }
@@ -135,9 +139,9 @@ namespace EndOfDays
         {
             try
             {
-                ListPOS = new List<POS>();
-                ListPI = new List<POSPIS>();
-                ListPTPR = new List<POSPTPRS>();
+                //ListPOS = new List<POS>();
+                //ListPI = new List<POSPIS>();
+                //ListPTPR = new List<POSPTPRS>();
 
                 if (lv.Items.Count > 0)
                 {
@@ -160,23 +164,62 @@ namespace EndOfDays
         {
             if (getABBNO() == true)
             {
-                using (var client = new HttpClient())
-                {
-                    
-                        client.BaseAddress = new Uri("http://5cosmeda.homeunix.com:89/ApiFromPOS/");
-                        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                        var response = client.PostAsJsonAsync("api/POS/InsertBill", ListPOS).Result;
-                        if (response.IsSuccessStatusCode)
-                        {
-                            upPosUL();
-                            MessageBox.Show("สำเร็จ");
-                        }
-                        else
-                        {
-                            MessageBox.Show(response.StatusCode.ToString());
-                        }
-                   
+                //using (var client = new HttpClient())
+                //{
 
+                //    List<Result> model = new List<Result>();
+
+                //    //client.BaseAddress = new Uri("http://5cosmeda.homeunix.com:89/ApiFromPOS/");
+                //    client.BaseAddress = new Uri("http://192.168.10.202:89/ApiFromPOS/");
+                //    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                //    var json = JsonConvert.SerializeObject(ListPOS);
+
+                //    JSONSTRING ss = new JSONSTRING();
+                //    ss.DATAJSON = json;
+
+                //    var response = client.PostAsJsonAsync("api/POS/InsertBill", ss).Result;
+                //    var jsonString = response.Content.ReadAsFormDataAsync();
+                //    jsonString.Wait();
+                //    model = JsonConvert.DeserializeObject<List<Result>>(jsonString.Result);
+
+                //    if ((int)response.StatusCode == 200)
+                //        {
+                //            upPosUL();
+                //            MessageBox.Show("สำเร็จ");
+                //        }
+                //        else
+                //        {
+                //            MessageBox.Show(response.StatusCode.ToString());
+                //        }
+
+
+                //}
+
+                var restClient = new RestClient("http://5cosmeda.homeunix.com:89/ApiFromPOS/api/POS/InsertBill");
+                //var restClient = new RestClient("http://192.168.10.202/ApiCoupon/API/Coupon/SaveRight/");
+                var request = new RestRequest(Method.POST);
+                request.RequestFormat = DataFormat.Json;
+                var json = JsonConvert.SerializeObject(ListPOS);
+
+                JSONSTRING ss = new JSONSTRING();
+                ss.DATAJSON = json;
+                request.AddJsonBody(ss);
+                var response = restClient.Execute(request);
+
+                JsonDeserializer deserial = new JsonDeserializer();
+                List<Result> bl = deserial.Deserialize<List<Result>>(response);
+
+                var item = bl.FirstOrDefault();
+
+                if (item.StatusCode == 1)
+                {
+                    upPosUL();
+                    MessageBox.Show("สำเร็จ");
+                }
+                else
+                {
+                    MessageBox.Show(item.Messages);
                 }
             }
 
@@ -207,7 +250,8 @@ namespace EndOfDays
 
 
                 //var bill_rs = sup.POS_ULs.Where(s => s.UFLAG == "N" &&( s.ABBNO == "10789" ) ).ToList();
-                var bill_rs = sup.POS_ULs.Where(s => s.UFLAG == "N" ).ToList();
+                //var bill_rs = sup.POS_ULs.Where(s => s.UFLAG == "N" ).Take(2).ToList();
+                var bill_rs = sup.POS_ULs.Where(s => s.UFLAG == "N").ToList();
 
                 foreach (var item in bill_rs)
                 {
@@ -234,6 +278,10 @@ namespace EndOfDays
             var sql_pi = cmd.POS_PIs.Where(s => s.WH_ID == _wh_id && s.WORKDATE == _workdate && s.TMCODE == _tmcode && s.ABBNO == _abbno).ToList();
 
             var sql_pr = cmd.POS_PT_PRs.Where(s => s.WH_ID == _wh_id && s.WORKDATE == _workdate && s.TMCODE == _tmcode && s.ABBNO == _abbno).ToList();
+
+            
+            List<POSPIS> ListPI = new List<POSPIS>();
+            List<POSPTPRS> ListPTPR = new List<POSPTPRS>(); 
 
             POSPTS pt = new POSPTS
             {
@@ -343,10 +391,11 @@ namespace EndOfDays
                     TAG_F = item.TAG_F,
                     TAG_S = item.TAG_S
                 };
+               
                 ListPI.Add(pis1);
             }
 
-
+            
             foreach (var item in sql_pr)
             {
 
@@ -366,6 +415,7 @@ namespace EndOfDays
                     DISCOUNTAMT = item.DISCOUNTAMT,
                     WORKDATE = item.WORKDATE
                 };
+                
                 ListPTPR.Add(ptpr);
             }
 

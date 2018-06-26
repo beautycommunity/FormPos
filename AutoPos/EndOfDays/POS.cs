@@ -16,7 +16,19 @@ namespace EndOfDays
         public string ENDDAY { get; set; }
     }
 
-   
+    public class Result
+    {
+        public int StatusCode { get; set; }
+        public string Messages { get; set; }
+        public int Records { get; set; }
+        public object Results { get; set; }
+    }
+
+    public class JSONSTRING
+    {
+        public string DATAJSON { get; set; }
+    }
+
 
     public class POSPTS
     {

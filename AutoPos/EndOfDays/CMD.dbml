@@ -147,6 +147,7 @@
       <Column Name="TMCODE" Type="System.String" DbType="VarChar(20) NOT NULL" CanBeNull="false" />
       <Column Name="WORKDATE" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
       <Column Name="NET" Type="System.Decimal" DbType="Decimal(15,2)" CanBeNull="true" />
+      <Column Name="ptstatus" Type="System.String" DbType="VarChar(9)" CanBeNull="true" />
     </Type>
   </Table>
   <Function Name="dbo.PF_GET_SALES" Method="PF_GET_SALES" IsComposable="true">
