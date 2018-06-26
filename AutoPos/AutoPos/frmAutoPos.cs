@@ -77,21 +77,24 @@ namespace AutoPos
             {
                 using (var client = new HttpClient())
                 {
-                    int sms = 0;
+                    int sta = 0;
+                    string sms = "";
                     client.BaseAddress = new Uri("http://5cosmeda.homeunix.com:89/ApiFromPOS/");
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                     var response = client.PostAsJsonAsync("api/POS/InsertBill", ListPOS).Result;
                     var details = JObject.Parse(response.Content.ReadAsStringAsync().Result);
 
-                    sms = Convert.ToInt32(details["Results"]["Statuscode"]);
-                    if (sms == 1)
+                    sta= Convert.ToInt32(details["Results"]["Statuscode"]);
+                    sms = details["Results"]["Messages"].ToString();
+
+                    if (sta == 1)
                     {
                         upPosUL();
-                        uplog(Whcode,"ok");
+                        uplog(Whcode,sms);
                     }
                     else
                     {
-                        uplog(Whcode, "InsertBill failed");
+                        uplog(Whcode, sms);
                     }
 
                   
