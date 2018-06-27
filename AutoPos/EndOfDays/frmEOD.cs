@@ -197,7 +197,7 @@ namespace EndOfDays
                 //}
 
                 var restClient = new RestClient("http://5cosmeda.homeunix.com:89/ApiFromPOS/api/POS/InsertBill");
-                //var restClient = new RestClient("http://192.168.10.202/ApiCoupon/API/Coupon/SaveRight/");
+                //var restClient = new RestClient("http://192.168.10.202/ApiFromPOS/api/POS/InsertBill");
                 var request = new RestRequest(Method.POST);
                 request.RequestFormat = DataFormat.Json;
                 var json = JsonConvert.SerializeObject(ListPOS);
@@ -419,7 +419,24 @@ namespace EndOfDays
                 ListPTPR.Add(ptpr);
             }
 
-            POS pos = new POS { POSPT = pt, POSPI = ListPI, POSPTPR = ListPTPR, CREATEBY = Stcode,ENDDAY = "Y" };
+            string sbrand = "";
+            string fstr;
+            fstr = Whcode.Substring(0, 1);
+
+            if (fstr == "1" || fstr == "3")
+            {
+                sbrand = "BB";
+            }
+            else if (fstr == "5")
+            {
+                sbrand = "BC";
+            }
+            else
+            {
+                sbrand = "BM";
+            }
+
+            POS pos = new POS { POSPT = pt, POSPI = ListPI, POSPTPR = ListPTPR, CREATEBY = Stcode,ENDDAY = "Y" ,BRAND = sbrand};
             ListPOS.Add(pos);
            
 

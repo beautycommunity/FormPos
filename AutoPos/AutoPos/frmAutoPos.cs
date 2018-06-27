@@ -65,9 +65,10 @@ namespace AutoPos
 
         private void frmMain_Load(object sender, EventArgs e)
         {
-
+            setPath();
             cmd.Connection.ConnectionString = StrConn;
             sup.Connection.ConnectionString = StrConnSup;
+  
             Displaynotify();
             this.ShowInTaskbar = false;
             tm.Start();
@@ -122,7 +123,7 @@ namespace AutoPos
             }
             catch(Exception ex)
             {
-                uplog(Whcode, ex);
+                uplog(Whcode, ex.Message);
             }
             
         }
@@ -322,7 +323,24 @@ namespace AutoPos
                 ListPTPR.Add(ptpr);
             }
 
-            POS pos = new POS { POSPT = pt, POSPI = ListPI, POSPTPR = ListPTPR ,CREATEBY = Whcode,ENDDAY="N"};
+            string brand = "";
+            string fstr;
+            fstr = Whcode.Substring(0, 1);
+
+            if(fstr == "1" || fstr == "3")
+            {
+                brand = "BB";
+            }
+            else if(fstr == "5")
+            {
+                brand = "BC";
+            }
+            else
+            {
+                brand = "BM";
+            }
+
+            POS pos = new POS { POSPT = pt, POSPI = ListPI, POSPTPR = ListPTPR ,CREATEBY = Whcode,ENDDAY="N",BRAND = brand};
             ListPOS.Add(pos);
 
         }
@@ -431,6 +449,24 @@ namespace AutoPos
 
             sup.trn_log_pos.InsertOnSubmit(lp);
             sup.SubmitChanges();
+        }
+
+        private void setPath()
+        {
+            
+            string pas = Application.StartupPath;
+            string sourcePath = pas;
+            //string destinationPath = @"C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup";
+            string destinationPath = Environment.GetFolderPath(Environment.SpecialFolder.Startup);
+            string sourceFileName = "AutoPos.lnk";//eny tipe of file
+            string sourceFile = System.IO.Path.Combine(sourcePath, sourceFileName);
+            string destinationFile = System.IO.Path.Combine(destinationPath, sourceFileName);
+
+            if (!System.IO.Directory.Exists(destinationFile))
+            {
+                System.IO.File.Copy(sourceFile, destinationFile, true);
+            }
+           
         }
 
 

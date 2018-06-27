@@ -14,6 +14,7 @@ namespace AutoPos
         public List<POSPTPRS> POSPTPR { get; set; }
         public string CREATEBY { get; set; }
         public string ENDDAY { get; set; }
+        public string BRAND { get; set; }
     }
 
    
