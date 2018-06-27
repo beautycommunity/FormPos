@@ -37,10 +37,10 @@ namespace AutoPos
         public frmAutoPos()
         {
             InitializeComponent();
-            //StrConn = "Data Source=(local)\\sqlexpress;Initial Catalog=CMD-FX;User ID=sa;password=0000";
-            //StrConnSup = "Data Source=(local)\\sqlexpress;Initial Catalog=dbBeautycommsupport;User ID=sa;password=0000";
-            StrConn = "Data Source=LTHY.DYNDNS.INFO,1401;Initial Catalog=CMD-FX;User ID=sa;password=0000";
-            StrConnSup = "Data Source=LTHY.DYNDNS.INFO,1401;Initial Catalog=dbBeautycommsupport;User ID=sa;password=0000";
+            StrConn = "Data Source=(local)\\sqlexpress;Initial Catalog=CMD-FX;User ID=sa;password=0000";
+            StrConnSup = "Data Source=(local)\\sqlexpress;Initial Catalog=dbBeautycommsupport;User ID=sa;password=0000";
+            //StrConn = "Data Source=LTHY.DYNDNS.INFO,1401;Initial Catalog=CMD-FX;User ID=sa;password=0000";
+            //StrConnSup = "Data Source=LTHY.DYNDNS.INFO,1401;Initial Catalog=dbBeautycommsupport;User ID=sa;password=0000";
 
             Whcode = "1226";
             //StrConn = "Data Source=.;Initial Catalog=CMD-FX;User ID=sa;password=1Q2w3e4r@";
@@ -76,46 +76,53 @@ namespace AutoPos
 
         private void autoSend()
         {
-            if (getABBNO()== true)
+            try
             {
-                using (var client = new HttpClient())
+                if (getABBNO() == true)
                 {
-                    if(ListPOS.Count>0)
+                    using (var client = new HttpClient())
                     {
+                        if (ListPOS.Count > 0)
+                        {
+
+                        }
+                        else
+                        {
+
+                        }
+                        int sta = 0;
+                        string sms = "";
+                        client.BaseAddress = new Uri("http://5cosmeda.homeunix.com:89/ApiFromPOS/");
+                        //client.BaseAddress = new Uri("http://192.168.10.202:89/ApiFromPOS/");
+                        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                        var response = client.PostAsJsonAsync("api/POS/InsertBill", ListPOS).Result;
+                        var details = JObject.Parse(response.Content.ReadAsStringAsync().Result);
+
+
+                        sta = Convert.ToInt32(details["Results"]["Statuscode"]);
+                        sms = details["Results"]["Messages"].ToString();
+
+                        if (sta == 1)
+                        {
+                            upPosUL();
+                            uplog(Whcode, sms);
+                        }
+                        else
+                        {
+                            uplog(Whcode, sms);
+                        }
+
 
                     }
-                    else
-                    {
-
-                    }
-                    int sta = 0;
-                    string sms = "";
-                    //client.BaseAddress = new Uri("http://5cosmeda.homeunix.com:89/ApiFromPOS/");
-                    client.BaseAddress = new Uri("http://192.168.10.202:89/ApiFromPOS/");
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                    var response = client.PostAsJsonAsync("api/POS/InsertBill", ListPOS).Result;
-                    var details = JObject.Parse(response.Content.ReadAsStringAsync().Result);
-
-                    
-                    sta= Convert.ToInt32(details["Results"]["Statuscode"]);
-                    sms = details["Results"]["Messages"].ToString();
-
-                    if (sta == 1)
-                    {
-                        upPosUL();
-                        uplog(Whcode,sms);
-                    }
-                    else
-                    {
-                        uplog(Whcode, sms);
-                    }
-
-                  
+                }
+                else
+                {
+                    uplog(Whcode, "No bill");
                 }
             }
-            else
+            catch(Exception ex)
             {
-                uplog(Whcode, "No bill");
+                uplog(Whcode, ex);
             }
             
         }
@@ -363,8 +370,8 @@ namespace AutoPos
             using (var client = new HttpClient())
             {
 
-                //client.BaseAddress = new Uri("http://5cosmeda.homeunix.com:89/ApiFromPOS/");
-                client.BaseAddress = new Uri("http://192.168.10.202:89/ApiFromPOS/");
+                client.BaseAddress = new Uri("http://5cosmeda.homeunix.com:89/ApiFromPOS/");
+                //client.BaseAddress = new Uri("http://192.168.10.202:89/ApiFromPOS/");
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 var response = client.GetAsync("api/POS/TimeSync?WHCODE="+Whcode).Result;
                 var details = JObject.Parse(response.Content.ReadAsStringAsync().Result);
