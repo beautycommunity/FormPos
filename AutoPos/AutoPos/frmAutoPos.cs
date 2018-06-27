@@ -397,6 +397,7 @@ namespace AutoPos
         {
            trn_log_pos lp = new trn_log_pos();
             lp.whcode = _whcode;
+            lp.workdate = DateTime.Now;
             lp.sms = _sms;
 
             sup.trn_log_pos.InsertOnSubmit(lp);
