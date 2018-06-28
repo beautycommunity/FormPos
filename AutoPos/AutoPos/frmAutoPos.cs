@@ -99,20 +99,26 @@ namespace AutoPos
                         var response = client.PostAsJsonAsync("api/POS/InsertBill", ListPOS).Result;
                         var details = JObject.Parse(response.Content.ReadAsStringAsync().Result);
 
-
-                        sta = Convert.ToInt32(details["Results"]["Statuscode"]);
-                        sms = details["Results"]["Messages"].ToString();
-
-                        if (sta == 1)
+                        if ((int)response.StatusCode == 200)
                         {
-                            upPosUL();
-                            uplog(Whcode, sms);
+                            sta = Convert.ToInt32(details["Results"]["Statuscode"]);
+                            sms = details["Results"]["Messages"].ToString();
+
+                            if (sta == 1)
+                            {
+                                upPosUL();
+                                uplog(Whcode, sms);
+                            }
+                            else
+                            {
+                                uplog(Whcode, sms);
+                            }
                         }
                         else
                         {
-                            uplog(Whcode, sms);
+                            uplog(Whcode, response.StatusCode.ToString());
+                           
                         }
-
 
                     }
                 }

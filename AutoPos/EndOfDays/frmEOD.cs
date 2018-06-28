@@ -26,6 +26,7 @@ namespace EndOfDays
         string StrConnSup;
         string Whcode;
         string Stcode;
+        string sms;
         CultureInfo us = CultureInfo.GetCultureInfo("en-US");
 
         //List<POS> ListPOS;
@@ -72,7 +73,8 @@ namespace EndOfDays
        
         private void frmEOD_Load(object sender, EventArgs e)
         {
-            
+            bgw.WorkerReportsProgress = true;
+            CheckForIllegalCrossThreadCalls = false;
 
             cmd.Connection.ConnectionString = StrConn;
             sup.Connection.ConnectionString = StrConnSup;
@@ -145,8 +147,12 @@ namespace EndOfDays
 
                 if (lv.Items.Count > 0)
                 {
-                    autoSend();
-                    loadData();
+                    //autoSend();
+                    //loadData();
+
+                    pb.Location = new Point((this.Width - pb.Width) / 2, (this.Height - pb.Height) / 2);
+                    pb.Visible = true;
+                    bgw.RunWorkerAsync();
                 }
                 else
                 {
@@ -205,26 +211,37 @@ namespace EndOfDays
                 JSONSTRING ss = new JSONSTRING();
                 ss.DATAJSON = json;
                 request.AddJsonBody(ss);
-                var response = restClient.Execute(request);
+               var response = restClient.Execute(request);
 
                 JsonDeserializer deserial = new JsonDeserializer();
-                List<Result> bl = deserial.Deserialize<List<Result>>(response);
 
-                var item = bl.FirstOrDefault();
-
-                if (item.StatusCode == 1)
+                if ((int)response.StatusCode == 200)
                 {
-                    upPosUL();
-                    MessageBox.Show("สำเร็จ");
+                    List<Result> bl = deserial.Deserialize<List<Result>>(response);
+                    var item = bl.FirstOrDefault();
+
+                    if (item.StatusCode == 1)
+                    {
+                        upPosUL();
+                        sms = "สำเร็จ";
+                        //MessageBox.Show("สำเร็จ");
+                    }
+                    else
+                    {
+                        sms = item.Messages;
+                        //MessageBox.Show(item.Messages);
+                    }
                 }
                 else
                 {
-                    MessageBox.Show(item.Messages);
+                    sms = response.ErrorException.Message;
+                    //MessageBox.Show(response.StatusCode.ToString());
                 }
+
             }
 
         }
-
+        
         private bool getABBNO()
         {
             bool bl = false;
@@ -475,6 +492,7 @@ namespace EndOfDays
             return bl;
         }
 
+
         private void upPosUL()
         {
             var data = sup.POS_ULs.Where(s => s.UFLAG == "N").ToList();
@@ -489,6 +507,21 @@ namespace EndOfDays
 
         }
 
-       
+        private void bgw_DoWork(object sender, DoWorkEventArgs e)
+        {
+            autoSend();
+            loadData();
+        }
+
+        private void bgw_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            pb.Visible = false;
+            ShowSMS();
+        }
+
+        private void ShowSMS()
+        {
+            MessageBox.Show(sms);
+        }
     }
 }

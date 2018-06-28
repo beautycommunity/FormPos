@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmEOD));
             this.btnSend = new System.Windows.Forms.Button();
             this.lblSend = new System.Windows.Forms.Label();
             this.lv = new System.Windows.Forms.ListView();
@@ -38,12 +39,15 @@
             this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.lblNone = new System.Windows.Forms.Label();
             this.columnHeader8 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.lblNone = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.bgw = new System.ComponentModel.BackgroundWorker();
+            this.pb = new System.Windows.Forms.PictureBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pb)).BeginInit();
             this.SuspendLayout();
             // 
             // btnSend
@@ -131,6 +135,12 @@
             this.columnHeader7.Text = "สถานะ";
             this.columnHeader7.Width = 100;
             // 
+            // columnHeader8
+            // 
+            this.columnHeader8.Text = "ยอด";
+            this.columnHeader8.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.columnHeader8.Width = 100;
+            // 
             // lblNone
             // 
             this.lblNone.Font = new System.Drawing.Font("Tahoma", 72F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(222)));
@@ -142,12 +152,6 @@
             this.lblNone.TabIndex = 3;
             this.lblNone.Text = "999";
             this.lblNone.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // columnHeader8
-            // 
-            this.columnHeader8.Text = "ยอด";
-            this.columnHeader8.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.columnHeader8.Width = 100;
             // 
             // groupBox1
             // 
@@ -173,10 +177,29 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "บิลคงค้าง";
             // 
+            // bgw
+            // 
+            this.bgw.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgw_DoWork);
+            this.bgw.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgw_RunWorkerCompleted);
+            // 
+            // pb
+            // 
+            this.pb.BackColor = System.Drawing.Color.White;
+            this.pb.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.pb.Image = ((System.Drawing.Image)(resources.GetObject("pb.Image")));
+            this.pb.Location = new System.Drawing.Point(252, 183);
+            this.pb.Name = "pb";
+            this.pb.Size = new System.Drawing.Size(304, 231);
+            this.pb.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.pb.TabIndex = 189;
+            this.pb.TabStop = false;
+            this.pb.Visible = false;
+            // 
             // frmEOD
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(1262, 653);
+            this.Controls.Add(this.pb);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.btnSend);
@@ -194,8 +217,10 @@
             this.Controls.SetChildIndex(this.btnSend, 0);
             this.Controls.SetChildIndex(this.groupBox1, 0);
             this.Controls.SetChildIndex(this.groupBox2, 0);
+            this.Controls.SetChildIndex(this.pb, 0);
             this.groupBox1.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pb)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -216,6 +241,8 @@
         private System.Windows.Forms.ColumnHeader columnHeader8;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.GroupBox groupBox2;
+        private System.ComponentModel.BackgroundWorker bgw;
+        internal System.Windows.Forms.PictureBox pb;
     }
 }
 
