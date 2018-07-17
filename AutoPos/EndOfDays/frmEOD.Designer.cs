@@ -71,7 +71,7 @@
             this.lblSend.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.lblSend.Size = new System.Drawing.Size(291, 122);
             this.lblSend.TabIndex = 2;
-            this.lblSend.Text = "199";
+            this.lblSend.Text = "-";
             this.lblSend.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // lv
@@ -150,7 +150,7 @@
             this.lblNone.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.lblNone.Size = new System.Drawing.Size(291, 127);
             this.lblNone.TabIndex = 3;
-            this.lblNone.Text = "999";
+            this.lblNone.Text = "-";
             this.lblNone.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // groupBox1

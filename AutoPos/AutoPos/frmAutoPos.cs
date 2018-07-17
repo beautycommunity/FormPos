@@ -14,7 +14,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using System.Globalization;
-
+using Newtonsoft.Json;
 
 namespace AutoPos
 {
@@ -37,14 +37,14 @@ namespace AutoPos
         public frmAutoPos()
         {
             InitializeComponent();
-            StrConn = "Data Source=(local)\\sqlexpress;Initial Catalog=CMD-FX;User ID=sa;password=0000";
-            StrConnSup = "Data Source=(local)\\sqlexpress;Initial Catalog=dbBeautycommsupport;User ID=sa;password=0000";
-            //StrConn = "Data Source=LTHY.DYNDNS.INFO,1401;Initial Catalog=CMD-FX;User ID=sa;password=0000";
-            //StrConnSup = "Data Source=LTHY.DYNDNS.INFO,1401;Initial Catalog=dbBeautycommsupport;User ID=sa;password=0000";
+            //StrConn = "Data Source=(local)\\sqlexpress;Initial Catalog=CMD-FX;User ID=sa;password=0000";
+            //StrConnSup = "Data Source=(local)\\sqlexpress;Initial Catalog=dbBeautycommsupport;User ID=sa;password=0000";
+            ////StrConn = "Data Source=AYUD2.DYNDNS.info,1401;Initial Catalog=CMD-FX;User ID=sa;password=0000";
+            ////StrConnSup = "Data Source=AYUD2.DYNDNS.info,1401;Initial Catalog=dbBeautycommsupport;User ID=sa;password=0000";
 
-            Whcode = "1226";
-            //StrConn = "Data Source=.;Initial Catalog=CMD-FX;User ID=sa;password=1Q2w3e4r@";
-            //StrConnSup = "Data Source=.;Initial Catalog=dbBeautycommsupport;User ID=sa;password=1Q2w3e4r@";
+            Whcode = "";
+            StrConn = "Data Source=.;Initial Catalog=CMD-FX;User ID=sa;password=1Q2w3e4r@";
+            StrConnSup = "Data Source=.;Initial Catalog=dbBeautycommsupport;User ID=sa;password=1Q2w3e4r@";
             //Whcode = "1006";
         }
 
@@ -68,7 +68,12 @@ namespace AutoPos
             setPath();
             cmd.Connection.ConnectionString = StrConn;
             sup.Connection.ConnectionString = StrConnSup;
-  
+
+            if(Whcode == "")
+            {
+                setWhcode();
+            }
+            label1.Text = Whcode;
             Displaynotify();
             this.ShowInTaskbar = false;
             tm.Start();
@@ -77,48 +82,65 @@ namespace AutoPos
 
         private void autoSend()
         {
+           
             try
             {
+                ListPOS.Clear();
+
                 if (getABBNO() == true)
                 {
                     using (var client = new HttpClient())
                     {
                         if (ListPOS.Count > 0)
                         {
+                            int sta = 0;
+                            string sms = "";
+                            client.BaseAddress = new Uri("http://5cosmeda.homeunix.com:89/ApiFromPOS/");
+                            //client.BaseAddress = new Uri("http://192.168.10.202:89/ApiFromPOS/");
+                            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                        }
-                        else
-                        {
+                            var json = JsonConvert.SerializeObject(ListPOS);
 
-                        }
-                        int sta = 0;
-                        string sms = "";
-                        client.BaseAddress = new Uri("http://5cosmeda.homeunix.com:89/ApiFromPOS/");
-                        //client.BaseAddress = new Uri("http://192.168.10.202:89/ApiFromPOS/");
-                        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                        var response = client.PostAsJsonAsync("api/POS/InsertBill", ListPOS).Result;
-                        var details = JObject.Parse(response.Content.ReadAsStringAsync().Result);
+                            //---------------------------------------------------------------------//
+                            //var list = (from pp in ListPOS
+                            //           select pp).FirstOrDefault();
 
-                        if ((int)response.StatusCode == 200)
-                        {
-                            sta = Convert.ToInt32(details["Results"]["Statuscode"]);
-                            sms = details["Results"]["Messages"].ToString();
+                            //string abn = list.POSPT.ABBNO;
+                            //---------------------------------------------------------------------//
 
-                            if (sta == 1)
+                            JSONSTRING ss = new JSONSTRING();
+                            ss.DATAJSON = json;
+
+                            var response = client.PostAsJsonAsync("api/POS/InsertBill", ss).Result;
+                            var details = JObject.Parse(response.Content.ReadAsStringAsync().Result);
+
+                            if ((int)response.StatusCode == 200)
                             {
-                                upPosUL();
-                                uplog(Whcode, sms);
+                                sta = Convert.ToInt32(details["StatusCode"]);
+                                sms = details["Messages"].ToString();
+
+                                if (sta == 1)
+                                {
+                                    //upPosUL(abn);
+                                    upPosUL();
+                                    uplog(Whcode, "3" + sms);
+                                }
+                                else
+                                {
+                                    uplog(Whcode, "2" + sms);
+                                }
                             }
                             else
                             {
-                                uplog(Whcode, sms);
+                                uplog(Whcode, "1"+response.StatusCode.ToString());
+
                             }
                         }
                         else
                         {
-                            uplog(Whcode, response.StatusCode.ToString());
-                           
+                            uplog(Whcode, "No bill");
                         }
+                        
 
                     }
                 }
@@ -129,7 +151,7 @@ namespace AutoPos
             }
             catch(Exception ex)
             {
-                uplog(Whcode, ex.Message);
+                uplog(Whcode, "4" + ex.Message);
             }
             
         }
@@ -159,9 +181,10 @@ namespace AutoPos
                 }
 
 
-                var bill_rs = sup.POS_ULs.Where(s => s.UFLAG == "N").ToList(); 
-               
-                foreach(var item in bill_rs)
+                //var bill_rs = sup.POS_ULs.Where(s => s.UFLAG == "N").ToList();
+                var bill_rs = sup.POS_ULs.Where(s => s.UFLAG == "N").Take(1).ToList();
+
+                foreach (var item in bill_rs)
                 {
                     getList(item.WH_ID, item.TMCODE, item.WORKDATE, item.ABBNO);
                 }
@@ -175,7 +198,7 @@ namespace AutoPos
             }
             catch(Exception ex)
             {
-                uplog(Whcode, ex.Message);
+                uplog(Whcode, "5" + ex.Message);
                 //MessageBox.Show(ex.Message);
                 bl = false;
             }
@@ -413,8 +436,17 @@ namespace AutoPos
             try
             {
                 tm.Stop();
-                autoSend();
-                tm.Interval = getTime() * 60000;
+                int tt = getTime();
+                if (tt > 0)
+                {
+                    tm.Interval = getTime() * 60000;
+                    autoSend();
+                }
+                else
+                {
+                    uplog(Whcode, "time = 0");
+                }
+
                 tm.Start();
             }
             catch(Exception ex)
@@ -427,14 +459,29 @@ namespace AutoPos
         private void btn_test_Click(object sender, EventArgs e)
         {
             tm.Stop();
+
             autoSend();
-            tm.Interval = getTime() * 60000;
+            //tm.Interval = getTime() * 60000;
             tm.Start();
         }
 
         private void upPosUL()
         {
             var data = sup.POS_ULs.Where(s => s.UFLAG == "N").ToList();
+            foreach (var item in data)
+            {
+                var updata = sup.POS_ULs.Where(s => s.WH_ID == item.WH_ID && s.WORKDATE == item.WORKDATE && s.TMCODE == item.TMCODE && s.PTDATE == item.PTDATE && s.ABBNO == item.ABBNO).FirstOrDefault();
+
+                updata.UFLAG = "Y";
+
+                sup.SubmitChanges();
+            }
+
+        }
+
+        private void upPosUL(string abbno)
+        {
+            var data = sup.POS_ULs.Where(s => s.UFLAG == "N" && s.ABBNO == abbno).ToList();
             foreach (var item in data)
             {
                 var updata = sup.POS_ULs.Where(s => s.WH_ID == item.WH_ID && s.WORKDATE == item.WORKDATE && s.TMCODE == item.TMCODE && s.PTDATE == item.PTDATE && s.ABBNO == item.ABBNO).FirstOrDefault();
@@ -475,7 +522,13 @@ namespace AutoPos
            
         }
 
+        private void setWhcode()
+        {
+            int _wh_id = cmd.DEF_LOCALs.Select(s => s.WH_ID).FirstOrDefault();
+            string _whcode = cmd.MAS_WHs.Where(s=>s.ID == _wh_id).Select(s=>s.WHCODE).FirstOrDefault();
 
+            Whcode = _whcode;
+        }
     }
 
         

@@ -39,6 +39,9 @@ namespace EndOfDays
     partial void InsertPOS_PT_PR(POS_PT_PR instance);
     partial void UpdatePOS_PT_PR(POS_PT_PR instance);
     partial void DeletePOS_PT_PR(POS_PT_PR instance);
+    partial void InsertDEF_LOCAL(DEF_LOCAL instance);
+    partial void UpdateDEF_LOCAL(DEF_LOCAL instance);
+    partial void DeleteDEF_LOCAL(DEF_LOCAL instance);
     #endregion
 		
 		public CMDDataContext() : 
@@ -108,6 +111,14 @@ namespace EndOfDays
 			get
 			{
 				return this.GetTable<PV_None_Sync>();
+			}
+		}
+		
+		public System.Data.Linq.Table<DEF_LOCAL> DEF_LOCALs
+		{
+			get
+			{
+				return this.GetTable<DEF_LOCAL>();
 			}
 		}
 		
@@ -3360,6 +3371,284 @@ namespace EndOfDays
 				{
 					this._ptstatus = value;
 				}
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.DEF_LOCAL")]
+	public partial class DEF_LOCAL : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _ID;
+		
+		private int _WH_ID;
+		
+		private string _Server_Host;
+		
+		private string _Server_UserName;
+		
+		private string _Server_Password;
+		
+		private string _Server_PhoneNo;
+		
+		private string _Server_FtpUserName;
+		
+		private string _Server_FtpPassword;
+		
+		private System.Nullable<int> _Server_FtpPort;
+		
+		private string _Server_FtpMode;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIDChanging(int value);
+    partial void OnIDChanged();
+    partial void OnWH_IDChanging(int value);
+    partial void OnWH_IDChanged();
+    partial void OnServer_HostChanging(string value);
+    partial void OnServer_HostChanged();
+    partial void OnServer_UserNameChanging(string value);
+    partial void OnServer_UserNameChanged();
+    partial void OnServer_PasswordChanging(string value);
+    partial void OnServer_PasswordChanged();
+    partial void OnServer_PhoneNoChanging(string value);
+    partial void OnServer_PhoneNoChanged();
+    partial void OnServer_FtpUserNameChanging(string value);
+    partial void OnServer_FtpUserNameChanged();
+    partial void OnServer_FtpPasswordChanging(string value);
+    partial void OnServer_FtpPasswordChanged();
+    partial void OnServer_FtpPortChanging(System.Nullable<int> value);
+    partial void OnServer_FtpPortChanged();
+    partial void OnServer_FtpModeChanging(string value);
+    partial void OnServer_FtpModeChanged();
+    #endregion
+		
+		public DEF_LOCAL()
+		{
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int ID
+		{
+			get
+			{
+				return this._ID;
+			}
+			set
+			{
+				if ((this._ID != value))
+				{
+					this.OnIDChanging(value);
+					this.SendPropertyChanging();
+					this._ID = value;
+					this.SendPropertyChanged("ID");
+					this.OnIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_WH_ID", DbType="Int NOT NULL")]
+		public int WH_ID
+		{
+			get
+			{
+				return this._WH_ID;
+			}
+			set
+			{
+				if ((this._WH_ID != value))
+				{
+					this.OnWH_IDChanging(value);
+					this.SendPropertyChanging();
+					this._WH_ID = value;
+					this.SendPropertyChanged("WH_ID");
+					this.OnWH_IDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Server_Host", DbType="VarChar(100)")]
+		public string Server_Host
+		{
+			get
+			{
+				return this._Server_Host;
+			}
+			set
+			{
+				if ((this._Server_Host != value))
+				{
+					this.OnServer_HostChanging(value);
+					this.SendPropertyChanging();
+					this._Server_Host = value;
+					this.SendPropertyChanged("Server_Host");
+					this.OnServer_HostChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Server_UserName", DbType="VarChar(20)")]
+		public string Server_UserName
+		{
+			get
+			{
+				return this._Server_UserName;
+			}
+			set
+			{
+				if ((this._Server_UserName != value))
+				{
+					this.OnServer_UserNameChanging(value);
+					this.SendPropertyChanging();
+					this._Server_UserName = value;
+					this.SendPropertyChanged("Server_UserName");
+					this.OnServer_UserNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Server_Password", DbType="VarChar(20)")]
+		public string Server_Password
+		{
+			get
+			{
+				return this._Server_Password;
+			}
+			set
+			{
+				if ((this._Server_Password != value))
+				{
+					this.OnServer_PasswordChanging(value);
+					this.SendPropertyChanging();
+					this._Server_Password = value;
+					this.SendPropertyChanged("Server_Password");
+					this.OnServer_PasswordChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Server_PhoneNo", DbType="VarChar(100)")]
+		public string Server_PhoneNo
+		{
+			get
+			{
+				return this._Server_PhoneNo;
+			}
+			set
+			{
+				if ((this._Server_PhoneNo != value))
+				{
+					this.OnServer_PhoneNoChanging(value);
+					this.SendPropertyChanging();
+					this._Server_PhoneNo = value;
+					this.SendPropertyChanged("Server_PhoneNo");
+					this.OnServer_PhoneNoChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Server_FtpUserName", DbType="VarChar(20)")]
+		public string Server_FtpUserName
+		{
+			get
+			{
+				return this._Server_FtpUserName;
+			}
+			set
+			{
+				if ((this._Server_FtpUserName != value))
+				{
+					this.OnServer_FtpUserNameChanging(value);
+					this.SendPropertyChanging();
+					this._Server_FtpUserName = value;
+					this.SendPropertyChanged("Server_FtpUserName");
+					this.OnServer_FtpUserNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Server_FtpPassword", DbType="VarChar(20)")]
+		public string Server_FtpPassword
+		{
+			get
+			{
+				return this._Server_FtpPassword;
+			}
+			set
+			{
+				if ((this._Server_FtpPassword != value))
+				{
+					this.OnServer_FtpPasswordChanging(value);
+					this.SendPropertyChanging();
+					this._Server_FtpPassword = value;
+					this.SendPropertyChanged("Server_FtpPassword");
+					this.OnServer_FtpPasswordChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Server_FtpPort", DbType="Int")]
+		public System.Nullable<int> Server_FtpPort
+		{
+			get
+			{
+				return this._Server_FtpPort;
+			}
+			set
+			{
+				if ((this._Server_FtpPort != value))
+				{
+					this.OnServer_FtpPortChanging(value);
+					this.SendPropertyChanging();
+					this._Server_FtpPort = value;
+					this.SendPropertyChanged("Server_FtpPort");
+					this.OnServer_FtpPortChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Server_FtpMode", DbType="VarChar(10)")]
+		public string Server_FtpMode
+		{
+			get
+			{
+				return this._Server_FtpMode;
+			}
+			set
+			{
+				if ((this._Server_FtpMode != value))
+				{
+					this.OnServer_FtpModeChanging(value);
+					this.SendPropertyChanging();
+					this._Server_FtpMode = value;
+					this.SendPropertyChanged("Server_FtpMode");
+					this.OnServer_FtpModeChanged();
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
 		}
 	}

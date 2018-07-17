@@ -150,6 +150,20 @@
       <Column Name="ptstatus" Type="System.String" DbType="VarChar(9)" CanBeNull="true" />
     </Type>
   </Table>
+  <Table Name="dbo.DEF_LOCAL" Member="DEF_LOCALs">
+    <Type Name="DEF_LOCAL">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="WH_ID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Server_Host" Type="System.String" DbType="VarChar(100)" CanBeNull="true" />
+      <Column Name="Server_UserName" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="Server_Password" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="Server_PhoneNo" Type="System.String" DbType="VarChar(100)" CanBeNull="true" />
+      <Column Name="Server_FtpUserName" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="Server_FtpPassword" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="Server_FtpPort" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Server_FtpMode" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+    </Type>
+  </Table>
   <Function Name="dbo.PF_GET_SALES" Method="PF_GET_SALES" IsComposable="true">
     <ElementType Name="PF_GET_SALESResult">
       <Column Name="Ncnt" Type="System.Int32" DbType="Int" CanBeNull="true" />

@@ -17,7 +17,10 @@ namespace AutoPos
         public string BRAND { get; set; }
     }
 
-   
+    public class JSONSTRING
+    {
+        public string DATAJSON { get; set; }
+    }
 
     public class POSPTS
     {

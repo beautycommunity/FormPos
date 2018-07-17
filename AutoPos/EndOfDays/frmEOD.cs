@@ -43,19 +43,22 @@ namespace EndOfDays
 
             //StrConn = "Data Source=(local)/sqlexpress;Initial Catalog=CMD-FX;User ID=sa;password=0000";
             //StrConnSup = "Data Source=(local)/sqlexpress;Initial Catalog=dbBeautyCommSupport;User ID=sa;password=0000";
-            //Whcode = "1226";
-            //Stcode = "2558";
-
-            StrConn = "Data Source=.;Initial Catalog=CMD-FX;User ID=sa;password=1Q2w3e4r@";
-            StrConnSup = "Data Source=.;Initial Catalog=dbBeautyCommSupport;User ID=sa;password=1Q2w3e4r@";
-            Whcode = "1006";
+            StrConn = "Data Source=CENL.DYNDNS.info,1401;Initial Catalog=CMD-FX;User ID=sa;password=0000";
+            StrConnSup = "Data Source=CENL.DYNDNS.info,1401;Initial Catalog=dbBeautycommsupport;User ID=sa;password=0000";
+            Whcode = "1001";
             Stcode = "2558";
+
+            //StrConn = "Data Source=.;Initial Catalog=CMD-FX;User ID=sa;password=1Q2w3e4r@";
+            //StrConnSup = "Data Source=.;Initial Catalog=dbBeautyCommSupport;User ID=sa;password=1Q2w3e4r@";
+            //Whcode = "1006";
+            //Stcode = "2558";
         }
 
-        public frmEOD(string _strconn, string _whcode,string _stcode)
+        public frmEOD(string _strconn, string _strconnsup, string _whcode,string _stcode)
         {
             InitializeComponent();
             StrConn = _strconn;
+            StrConnSup = _strconnsup;
             Whcode = _whcode;
             Stcode = _stcode;
         }
@@ -79,6 +82,9 @@ namespace EndOfDays
             cmd.Connection.ConnectionString = StrConn;
             sup.Connection.ConnectionString = StrConnSup;
 
+            cmd.CommandTimeout = 1000000;
+            sup.CommandTimeout = 1000000;
+
            try
             {
                 loadData();
@@ -90,9 +96,9 @@ namespace EndOfDays
             }
         }
 
-        private void loadData()
+        private bool loadData()
         {
-            
+            bool bl = false;
             DateTime dt = DateTime.Now;
 
             if (insPosUL() == true)
@@ -101,9 +107,11 @@ namespace EndOfDays
 
                 if (Rs == null)
                 {
+                    decimal ul = sup.POS_ULs.Where(s => s.UFLAG == "Y" && s.WORKDATE == DateTime.Now.Date).Count();
+
                     lv.Items.Clear();
                     lblNone.Text = "-";
-                    lblSend.Text = "-";
+                    lblSend.Text = ul.ToString("#,##0");
                 }
                 else
                 {
@@ -133,7 +141,12 @@ namespace EndOfDays
                     lv.Items[idx].SubItems.Add(item.ptstatus);
                     lv.Items[idx].SubItems.Add(Convert.ToDecimal(item.NET).ToString("#,##0.00"));
                 }
+
+                bl = true;
             }
+           
+
+            return bl;
             
         }
 
@@ -144,6 +157,7 @@ namespace EndOfDays
                 //ListPOS = new List<POS>();
                 //ListPI = new List<POSPIS>();
                 //ListPTPR = new List<POSPTPRS>();
+                ListPOS.Clear();
 
                 if (lv.Items.Count > 0)
                 {
@@ -153,9 +167,15 @@ namespace EndOfDays
                     pb.Location = new Point((this.Width - pb.Width) / 2, (this.Height - pb.Height) / 2);
                     pb.Visible = true;
                     bgw.RunWorkerAsync();
+
+                    //autoSend();
+                    //loadData();
                 }
                 else
                 {
+
+                    noBillSend();
+
                     MessageBox.Show("ไม่มีบิลคงค้าง");
                 }
 
@@ -166,8 +186,62 @@ namespace EndOfDays
             }
         }
 
-        private void autoSend()
+        private void noBillSend()
         {
+            var restClient = new RestClient("http://5cosmeda.homeunix.com:89/ApiFromPOS/api/POS/InsertBill");
+            //var restClient = new RestClient("http://192.168.10.202/ApiFromPOS/api/POS/InsertBill");
+            var request = new RestRequest(Method.POST);
+            request.RequestFormat = DataFormat.Json;
+
+           int _wh_id = cmd.DEF_LOCALs.Select(s => s.WH_ID).FirstOrDefault();
+
+            POSPTENDDAY PEnd = new POSPTENDDAY{WH_ID= _wh_id, ENDDAY="Y", ENDDAY_BY=Stcode };
+
+            
+            var json = JsonConvert.SerializeObject(PEnd) ;
+
+            JSONSTRING ss = new JSONSTRING();
+            ss.DATAJSON = "";
+            ss.POSENDDAY = PEnd;
+
+            //request.AddJsonBody(ss);
+
+            request.AddBody(ss);
+
+            var response = restClient.Execute(request);
+
+            JsonDeserializer deserial = new JsonDeserializer();
+
+            if ((int)response.StatusCode == 200)
+            {
+                List<Result> bl = deserial.Deserialize<List<Result>>(response);
+
+
+                var item = bl.FirstOrDefault();
+
+                if (item.StatusCode == "1")
+                {
+
+                    sms = "สำเร็จ";
+
+                }
+                else
+                {
+                    sms = item.Messages;
+
+                }
+            }
+            else
+            {
+                sms = response.ErrorException.Message;
+                
+            }
+        }
+
+        private bool autoSend() 
+        {
+            Boolean abl = false;
+
             if (getABBNO() == true)
             {
                 //using (var client = new HttpClient())
@@ -206,11 +280,16 @@ namespace EndOfDays
                 //var restClient = new RestClient("http://192.168.10.202/ApiFromPOS/api/POS/InsertBill");
                 var request = new RestRequest(Method.POST);
                 request.RequestFormat = DataFormat.Json;
+
+
                 var json = JsonConvert.SerializeObject(ListPOS);
 
                 JSONSTRING ss = new JSONSTRING();
                 ss.DATAJSON = json;
-                request.AddJsonBody(ss);
+
+                //request.AddJsonBody(ss);
+                request.AddBody(ss);
+
                var response = restClient.Execute(request);
 
                 JsonDeserializer deserial = new JsonDeserializer();
@@ -218,27 +297,47 @@ namespace EndOfDays
                 if ((int)response.StatusCode == 200)
                 {
                     List<Result> bl = deserial.Deserialize<List<Result>>(response);
+
                     var item = bl.FirstOrDefault();
 
-                    if (item.StatusCode == 1)
+                    if (item.StatusCode == "1")
                     {
                         upPosUL();
                         sms = "สำเร็จ";
+                        abl = true;
                         //MessageBox.Show("สำเร็จ");
+                    }
+                    else if(item.StatusCode == "2")
+                    {
+                        if (item.Messages != "Violation of PRIMARY KEY constraint 'PK_POS_PT'. Cannot insert duplicate key in object 'dbo.POS_PT'. The duplicate key value is (445, 001, 11483, Jul 17 2018 12:00AM).\r\nThe statement has been terminated.")
+                        {
+                            upPosUL();
+                            sms = "สำเร็จ";
+                            abl = true;
+                        }
+                        else
+                        {
+                            sms = item.Messages;
+                            abl = false;
+                        }
                     }
                     else
                     {
                         sms = item.Messages;
+                        abl = false;
                         //MessageBox.Show(item.Messages);
                     }
                 }
                 else
                 {
                     sms = response.ErrorException.Message;
+                    abl = false;
                     //MessageBox.Show(response.StatusCode.ToString());
                 }
 
             }
+
+            return abl;
 
         }
         
@@ -267,7 +366,7 @@ namespace EndOfDays
 
 
                 //var bill_rs = sup.POS_ULs.Where(s => s.UFLAG == "N" &&( s.ABBNO == "10789" ) ).ToList();
-                //var bill_rs = sup.POS_ULs.Where(s => s.UFLAG == "N" ).Take(2).ToList();
+                //var bill_rs = sup.POS_ULs.Where(s => s.UFLAG == "N" ).Take(1).ToList();
                 var bill_rs = sup.POS_ULs.Where(s => s.UFLAG == "N").ToList();
 
                 foreach (var item in bill_rs)
@@ -280,7 +379,7 @@ namespace EndOfDays
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                sms = ex.Message;
                 bl = false;
             }
 
@@ -509,8 +608,14 @@ namespace EndOfDays
 
         private void bgw_DoWork(object sender, DoWorkEventArgs e)
         {
-            autoSend();
-            loadData();
+            if ( autoSend())
+            {
+                if (loadData()== false)
+                {
+                    sms = "ไม่สามารถ load ข้อมูล";
+                }
+            }
+            
         }
 
         private void bgw_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -521,7 +626,11 @@ namespace EndOfDays
 
         private void ShowSMS()
         {
-            MessageBox.Show(sms);
+            if(sms!="")
+            {
+                MessageBox.Show(sms);
+            }
+            
         }
     }
 }

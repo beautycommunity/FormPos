@@ -17,17 +17,32 @@ namespace EndOfDays
         public string BRAND { get; set; }
     }
 
+    public class POSPTENDDAY
+    {
+        public int WH_ID { get; set; }
+        public DateTime ENDDAY_DATE { get; set; }
+        public string ENDDAY_BY { get; set; }
+        public string ENDDAY { get; set; }
+        public string BRAND { get; set; }
+    }
+
     public class Result
     {
-        public int StatusCode { get; set; }
+        //public int StatusCode { get; set; }
+        //public string Messages { get; set; }
+        //public int Records { get; set; }
+        //public object Results { get; set; }
+
+        public string StatusCode { get; set; }
         public string Messages { get; set; }
-        public int Records { get; set; }
-        public object Results { get; set; }
+        public string Records { get; set; }
+        public string Results { get; set; }
     }
 
     public class JSONSTRING
     {
         public string DATAJSON { get; set; }
+        public POSPTENDDAY POSENDDAY { get; set; }
     }
 
 

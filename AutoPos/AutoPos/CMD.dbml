@@ -138,4 +138,55 @@
       <Column Name="UFLAG" Type="System.String" DbType="VarChar(1) NOT NULL" CanBeNull="false" />
     </Type>
   </Table>
+  <Table Name="dbo.DEF_LOCAL" Member="DEF_LOCALs">
+    <Type Name="DEF_LOCAL">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="WH_ID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Server_Host" Type="System.String" DbType="VarChar(100)" CanBeNull="true" />
+      <Column Name="Server_UserName" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="Server_Password" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="Server_PhoneNo" Type="System.String" DbType="VarChar(100)" CanBeNull="true" />
+      <Column Name="Server_FtpUserName" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="Server_FtpPassword" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="Server_FtpPort" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Server_FtpMode" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.MAS_WH" Member="MAS_WHs">
+    <Type Name="MAS_WH">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="WHCODE" Type="System.String" DbType="VarChar(10) NOT NULL" CanBeNull="false" />
+      <Column Name="ABBNAME" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="FULLNAME" Type="System.String" DbType="VarChar(100)" CanBeNull="true" />
+      <Column Name="SG_ID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="COMPANYNAME" Type="System.String" DbType="VarChar(100)" CanBeNull="true" />
+      <Column Name="ADDR_ROW1" Type="System.String" DbType="VarChar(80)" CanBeNull="true" />
+      <Column Name="ADDR_ROW2" Type="System.String" DbType="VarChar(80)" CanBeNull="true" />
+      <Column Name="ADDR_PROVINCE" Type="System.String" DbType="VarChar(30)" CanBeNull="true" />
+      <Column Name="ADDR_ZIPCODE" Type="System.String" DbType="VarChar(5)" CanBeNull="true" />
+      <Column Name="ADDR_TEL" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="ADDR_FAX" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="TAXID" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Column Name="OPENDATE" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="LINK_DATE" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="LINK_IN" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="LINK_OUT" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="LINK_STATUS" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Column Name="TMP_TARGET" Type="System.Decimal" DbType="Decimal(15,2)" CanBeNull="true" />
+      <Column Name="INSTALLPOS" Type="System.String" DbType="VarChar(1) NOT NULL" CanBeNull="false" />
+      <Column Name="POS_WHTYPE" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="POS_REPEATSTCODE" Type="System.String" DbType="VarChar(1)" CanBeNull="true" />
+      <Column Name="POS_CUSTDLG" Type="System.String" DbType="VarChar(1)" CanBeNull="true" />
+      <Column Name="POS_PRINTMT" Type="System.String" DbType="VarChar(1)" CanBeNull="true" />
+      <Column Name="POS_SHOWSALESAMTBYST" Type="System.String" DbType="VarChar(1)" CanBeNull="true" />
+      <Column Name="POS_GETPTREFNO" Type="System.String" DbType="VarChar(1)" CanBeNull="true" />
+      <Column Name="POS_ROUNDTYPE" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="POS_MAXSHIFTNO" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="POS_CN" Type="System.String" DbType="VarChar(1)" CanBeNull="true" />
+      <Column Name="POS_TIMEOPENING" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="POS_TIMECLOSING" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="POS_PWONPRINT" Type="System.String" DbType="VarChar(1)" CanBeNull="true" />
+      <Column Name="UPDATEDT" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+    </Type>
+  </Table>
 </Database>
