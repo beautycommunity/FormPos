@@ -92,7 +92,7 @@ namespace EndOfDays
             }
             catch(Exception ex)
             {
-                MessageBox.Show("เกิดข้อผิดพลาด\n" + ex.Message);
+                MessageBox.Show("เกิดข้อผิดพลาด\n" + ex.Message+"pro4");
             }
         }
 
@@ -182,7 +182,7 @@ namespace EndOfDays
             }
             catch (Exception ex)
             {
-                MessageBox.Show("เกิดข้อผิดพลาด\n" + ex.Message);
+                MessageBox.Show("เกิดข้อผิดพลาด\n" + ex.Message+"pro5");
             }
         }
 
@@ -227,22 +227,22 @@ namespace EndOfDays
                 }
                 else
                 {
-                    sms = item.Messages;
+                    sms = item.Messages+"debug1";
 
                 }
             }
             else
             {
-                sms = response.ErrorException.Message;
+                sms = response.ErrorException.Message + "Pro1";
                 
             }
         }
 
         private bool autoSend() 
         {
-            Boolean abl = false;
+            bool abl = false;
 
-            if (getABBNO() == true)
+            if (getABBNO())
             {
                 //using (var client = new HttpClient())
                 //{
@@ -317,20 +317,20 @@ namespace EndOfDays
                         }
                         else
                         {
-                            sms = item.Messages;
+                            sms = item.Messages + "debug2";
                             abl = false;
                         }
                     }
                     else
                     {
-                        sms = item.Messages;
+                        sms = item.Messages + "debug3";
                         abl = false;
                         //MessageBox.Show(item.Messages);
                     }
                 }
                 else
                 {
-                    sms = response.ErrorException.Message;
+                    sms = response.ErrorException.Message+"pro2";
                     abl = false;
                     //MessageBox.Show(response.StatusCode.ToString());
                 }
@@ -379,7 +379,7 @@ namespace EndOfDays
             }
             catch (Exception ex)
             {
-                sms = ex.Message;
+                sms = ex.Message+"TEST2";
                 bl = false;
             }
 
@@ -586,7 +586,7 @@ namespace EndOfDays
             catch (Exception ex)
             {
                 bl = false;
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message+"pro3");
             }
             return bl;
         }
@@ -612,8 +612,12 @@ namespace EndOfDays
             {
                 if (loadData()== false)
                 {
-                    sms = "ไม่สามารถ load ข้อมูล";
+                    sms = "ไม่สามารถ load ข้อมูล" ;
                 }
+            }
+            else
+            {
+                sms = "Test1";
             }
             
         }

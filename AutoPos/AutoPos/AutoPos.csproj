@@ -25,7 +25,7 @@
     <InstallUrl>http://5cosmeda.homeunix.com:85/AutoPos/</InstallUrl>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>1</ApplicationRevision>
+    <ApplicationRevision>8</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -106,6 +106,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClickOnceHelper.cs" />
+    <Compile Include="clsXML.cs" />
     <Compile Include="CMD.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -117,6 +119,8 @@
     <Compile Include="frmAutoPos.Designer.cs">
       <DependentUpon>frmAutoPos.cs</DependentUpon>
     </Compile>
+    <Compile Include="Globals.cs" />
+    <Compile Include="Keys.cs" />
     <Compile Include="POS.cs" />
     <Compile Include="POSUL.designer.cs">
       <AutoGen>True</AutoGen>

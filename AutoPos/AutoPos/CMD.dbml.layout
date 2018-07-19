@@ -27,7 +27,7 @@
         <classShapeMoniker Id="2a5fbf8b-1800-40d9-b9ca-fed65a6b3367" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(2.75 : 3.52965413411458); (3.5 : 3.52965413411458)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(2.75 : 3.52965413411458); (3.5 : 3.52965413411458)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/CMDDataContext/POS_PT/POS_PT_POS_PT_PR" />
       <nodes>
         <classShapeMoniker Id="19c5a29d-85c9-4862-acf1-a068437d9701" />

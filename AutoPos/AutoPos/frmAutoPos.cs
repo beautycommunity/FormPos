@@ -18,6 +18,7 @@ using Newtonsoft.Json;
 
 namespace AutoPos
 {
+
     public partial class frmAutoPos : frmSub
     {
         CultureInfo us = CultureInfo.GetCultureInfo("en-US");
@@ -34,17 +35,32 @@ namespace AutoPos
         CMDDataContext cmd = new CMDDataContext();
         POSULDataContext sup = new POSULDataContext();
 
+        protected override void OnLoad(EventArgs e)
+        {
+            try
+            {
+                var clickOnceHelper = new ClickOnceHelper(Globals.PublisherName, Globals.ProductName);
+                clickOnceHelper.UpdateUninstallParameters();
+                clickOnceHelper.AddShortcutToStartup();
+            }
+            catch (Exception ex)
+            {
+               MessageBox.Show(ex.Message);
+            }
+            base.OnLoad(e);
+        }
+
         public frmAutoPos()
         {
             InitializeComponent();
-            //StrConn = "Data Source=(local)\\sqlexpress;Initial Catalog=CMD-FX;User ID=sa;password=0000";
-            //StrConnSup = "Data Source=(local)\\sqlexpress;Initial Catalog=dbBeautycommsupport;User ID=sa;password=0000";
+            StrConn = "Data Source=(local)\\sqlexpress;Initial Catalog=CMD-FX;User ID=sa;password=0000";
+            StrConnSup = "Data Source=(local)\\sqlexpress;Initial Catalog=dbBeautycommsupport;User ID=sa;password=0000";
             ////StrConn = "Data Source=AYUD2.DYNDNS.info,1401;Initial Catalog=CMD-FX;User ID=sa;password=0000";
             ////StrConnSup = "Data Source=AYUD2.DYNDNS.info,1401;Initial Catalog=dbBeautycommsupport;User ID=sa;password=0000";
 
             Whcode = "";
-            StrConn = "Data Source=.;Initial Catalog=CMD-FX;User ID=sa;password=1Q2w3e4r@";
-            StrConnSup = "Data Source=.;Initial Catalog=dbBeautycommsupport;User ID=sa;password=1Q2w3e4r@";
+            //StrConn = "Data Source=.;Initial Catalog=CMD-FX;User ID=sa;password=1Q2w3e4r@";
+            //StrConnSup = "Data Source=.;Initial Catalog=dbBeautycommsupport;User ID=sa;password=1Q2w3e4r@";
             //Whcode = "1006";
         }
 
@@ -65,7 +81,8 @@ namespace AutoPos
 
         private void frmMain_Load(object sender, EventArgs e)
         {
-            setPath();
+            //setPath();
+           
             cmd.Connection.ConnectionString = StrConn;
             sup.Connection.ConnectionString = StrConnSup;
 
@@ -102,10 +119,10 @@ namespace AutoPos
                             var json = JsonConvert.SerializeObject(ListPOS);
 
                             //---------------------------------------------------------------------//
-                            //var list = (from pp in ListPOS
-                            //           select pp).FirstOrDefault();
+                            var list = (from pp in ListPOS
+                                        select pp).FirstOrDefault();
 
-                            //string abn = list.POSPT.ABBNO;
+                            string abn = list.POSPT.ABBNO;
                             //---------------------------------------------------------------------//
 
                             JSONSTRING ss = new JSONSTRING();
@@ -121,9 +138,21 @@ namespace AutoPos
 
                                 if (sta == 1)
                                 {
-                                    //upPosUL(abn);
-                                    upPosUL();
+                                    upPosUL(abn);
+                                    //upPosUL();
                                     uplog(Whcode, "3" + sms);
+                                }
+                                else if (sta == 2)
+                                {
+                                    if (sms != "Violation of PRIMARY KEY constraint 'PK_POS_PT'. Cannot insert duplicate key in object 'dbo.POS_PT'. The duplicate key value is (445, 001, 11483, Jul 17 2018 12:00AM).\r\nThe statement has been terminated.")
+                                    {
+                                        upPosUL();
+                                        uplog(Whcode, "4" + sms);
+                                    }
+                                    else
+                                    {
+                                        uplog(Whcode, "5" + sms);
+                                    }
                                 }
                                 else
                                 {
@@ -436,6 +465,8 @@ namespace AutoPos
             try
             {
                 tm.Stop();
+                clsXML cs = new clsXML();
+                cs.setXML();
                 int tt = getTime();
                 if (tt > 0)
                 {
@@ -521,6 +552,7 @@ namespace AutoPos
             }
            
         }
+
 
         private void setWhcode()
         {
