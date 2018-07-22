@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmAutoPos));
             this.btnOk = new System.Windows.Forms.Button();
             this.ntf = new System.Windows.Forms.NotifyIcon(this.components);
             this.tm = new System.Windows.Forms.Timer(this.components);
@@ -97,6 +98,7 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.btn_test);
             this.Controls.Add(this.btnOk);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "frmAutoPos";
             this.Text = "Auto POS";

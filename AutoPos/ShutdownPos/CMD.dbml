@@ -1,0 +1,210 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="CMD-FX" Class="CMDDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=.;Initial Catalog=CMD-FX;Persist Security Info=True;User ID=sa" SettingsObjectName="ShutdownPos.Properties.Settings" SettingsPropertyName="CMD_FXConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.DEF_LOCAL" Member="DEF_LOCALs">
+    <Type Name="DEF_LOCAL">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="WH_ID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Server_Host" Type="System.String" DbType="VarChar(100)" CanBeNull="true" />
+      <Column Name="Server_UserName" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="Server_Password" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="Server_PhoneNo" Type="System.String" DbType="VarChar(100)" CanBeNull="true" />
+      <Column Name="Server_FtpUserName" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="Server_FtpPassword" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="Server_FtpPort" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Server_FtpMode" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.POS_PI" Member="POS_PIs">
+    <Type Name="POS_PI">
+      <Column Name="WH_ID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="TMCODE" Type="System.String" DbType="VarChar(3) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="ABBNO" Type="System.String" DbType="VarChar(5) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="PTDATE" Type="System.DateTime" DbType="DateTime NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="ITEMNO" Type="System.Int16" DbType="SmallInt NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="MP_ID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="BC_ID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="VATABLE" Type="System.String" DbType="VarChar(1) NOT NULL" CanBeNull="false" />
+      <Column Name="CONTROLSN" Type="System.String" DbType="VarChar(1)" CanBeNull="true" />
+      <Column Name="SH_ID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ACPRICE" Type="System.Decimal" DbType="Decimal(15,2)" CanBeNull="true" />
+      <Column Name="PRICENO" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="DPRICE" Type="System.String" DbType="VarChar(1) NOT NULL" CanBeNull="false" />
+      <Column Name="BPRICE" Type="System.String" DbType="VarChar(1)" CanBeNull="true" />
+      <Column Name="PRICE" Type="System.Decimal" DbType="Decimal(15,2) NOT NULL" CanBeNull="false" />
+      <Column Name="UM_ID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="UMRATIO" Type="System.Decimal" DbType="Decimal(15,4) NOT NULL" CanBeNull="false" />
+      <Column Name="QTY" Type="System.Decimal" DbType="Decimal(15,4) NOT NULL" CanBeNull="false" />
+      <Column Name="DISCOUNTSTR" Type="System.String" DbType="VarChar(80)" CanBeNull="true" />
+      <Column Name="DISCOUNTAMT" Type="System.Decimal" DbType="Decimal(15,2) NOT NULL" CanBeNull="false" />
+      <Column Name="TOTAL" Type="System.Decimal" DbType="Decimal(15,2) NOT NULL" CanBeNull="false" />
+      <Column Name="NET" Type="System.Decimal" DbType="Decimal(15,2) NOT NULL" CanBeNull="false" />
+      <Column Name="VAL" Type="System.Decimal" DbType="Decimal(15,2)" CanBeNull="true" />
+      <Column Name="POINT" Type="System.Decimal" DbType="Decimal(15,2)" CanBeNull="true" />
+      <Column Name="PRCODE" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="OFFERID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ITEMAU" Type="System.String" DbType="VarChar(1)" CanBeNull="true" />
+      <Column Name="ITEMRF" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="QTY_RF" Type="System.Decimal" DbType="Decimal(15,4)" CanBeNull="true" />
+      <Column Name="PR_TOTAL" Type="System.Decimal" DbType="Decimal(15,2)" CanBeNull="true" />
+      <Column Name="PR_NET" Type="System.Decimal" DbType="Decimal(15,2)" CanBeNull="true" />
+      <Column Name="PR_VAL" Type="System.Decimal" DbType="Decimal(15,2)" CanBeNull="true" />
+      <Column Name="PIVOIDED" Type="System.String" DbType="VarChar(1) NOT NULL" CanBeNull="false" />
+      <Column Name="PISTATUS" Type="System.String" DbType="VarChar(1) NOT NULL" CanBeNull="false" />
+      <Column Name="WORKDATE" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="TAG_F" Type="System.Decimal" DbType="Decimal(15,2)" CanBeNull="true" />
+      <Column Name="TAG_S" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Association Name="POS_PT_POS_PI" Member="POS_PT" ThisKey="WH_ID,TMCODE,ABBNO,PTDATE" OtherKey="WH_ID,TMCODE,ABBNO,PTDATE" Type="POS_PT" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.POS_PT" Member="POS_PTs">
+    <Type Name="POS_PT">
+      <Column Name="WH_ID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="TMCODE" Type="System.String" DbType="VarChar(3) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="ABBNO" Type="System.String" DbType="VarChar(5) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="PTDATE" Type="System.DateTime" DbType="DateTime NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="PTTIME" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="SHIFTNO" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="PTSTATUS" Type="System.String" DbType="VarChar(1) NOT NULL" CanBeNull="false" />
+      <Column Name="OCSTATUS" Type="System.String" DbType="VarChar(1) NOT NULL" CanBeNull="false" />
+      <Column Name="WORKDATE" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="ST_ID_LOG" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ST_ID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="IV_DOCNO" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="CN_DOCNO" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="REFNO" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="CT_ID" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="CT_BILL_TO" Type="System.String" DbType="VarChar(100)" CanBeNull="true" />
+      <Column Name="CT_BILL_ADDR1" Type="System.String" DbType="VarChar(100)" CanBeNull="true" />
+      <Column Name="CT_BILL_ADDR2" Type="System.String" DbType="VarChar(100)" CanBeNull="true" />
+      <Column Name="CT_BILL_ADDR3" Type="System.String" DbType="VarChar(100)" CanBeNull="true" />
+      <Column Name="CT_CARDID" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="CTTYPE" Type="System.String" DbType="VarChar(1)" CanBeNull="true" />
+      <Column Name="CTCAT" Type="System.String" DbType="VarChar(3)" CanBeNull="true" />
+      <Column Name="CO_ID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="CO_CARDID" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="POINT" Type="System.Decimal" DbType="Decimal(15,2)" CanBeNull="true" />
+      <Column Name="POINT_TOTAL" Type="System.Decimal" DbType="Decimal(15,2)" CanBeNull="true" />
+      <Column Name="SDPCODE" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="PRCODE" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="REMARK" Type="System.String" DbType="VarChar(40)" CanBeNull="true" />
+      <Column Name="VATTYPE" Type="System.String" DbType="VarChar(1) NOT NULL" CanBeNull="false" />
+      <Column Name="VATRATE" Type="System.Decimal" DbType="Decimal(15,2) NOT NULL" CanBeNull="false" />
+      <Column Name="QTY" Type="System.Decimal" DbType="Decimal(15,4) NOT NULL" CanBeNull="false" />
+      <Column Name="SUMMARY" Type="System.Decimal" DbType="Decimal(15,2) NOT NULL" CanBeNull="false" />
+      <Column Name="ITEMDISCOUNT" Type="System.Decimal" DbType="Decimal(15,2) NOT NULL" CanBeNull="false" />
+      <Column Name="SUBTOTAL" Type="System.Decimal" DbType="Decimal(15,2) NOT NULL" CanBeNull="false" />
+      <Column Name="SUBTOTAL_NORM" Type="System.Decimal" DbType="Decimal(15,2) NOT NULL" CanBeNull="false" />
+      <Column Name="DISCOUNTSTR" Type="System.String" DbType="VarChar(80)" CanBeNull="true" />
+      <Column Name="DISCOUNTAMT" Type="System.Decimal" DbType="Decimal(15,2) NOT NULL" CanBeNull="false" />
+      <Column Name="DISCOUNTAMT_VAT" Type="System.Decimal" DbType="Decimal(15,2) NOT NULL" CanBeNull="false" />
+      <Column Name="TOTAL" Type="System.Decimal" DbType="Decimal(15,2) NOT NULL" CanBeNull="false" />
+      <Column Name="TOTAL_VAT" Type="System.Decimal" DbType="Decimal(15,2) NOT NULL" CanBeNull="false" />
+      <Column Name="VATAMT" Type="System.Decimal" DbType="Decimal(15,2) NOT NULL" CanBeNull="false" />
+      <Column Name="ROUNDAMT" Type="System.Decimal" DbType="Decimal(15,2) NOT NULL" CanBeNull="false" />
+      <Column Name="NET" Type="System.Decimal" DbType="Decimal(15,2) NOT NULL" CanBeNull="false" />
+      <Column Name="VAL" Type="System.Decimal" DbType="Decimal(15,2)" CanBeNull="true" />
+      <Column Name="PAY_OTHER" Type="System.Decimal" DbType="Decimal(15,2)" CanBeNull="true" />
+      <Column Name="PAY_CASH" Type="System.Decimal" DbType="Decimal(15,2)" CanBeNull="true" />
+      <Column Name="PAY_CASH_TENDER" Type="System.Decimal" DbType="Decimal(15,2)" CanBeNull="true" />
+      <Column Name="PAY_CARD1" Type="System.Decimal" DbType="Decimal(15,2)" CanBeNull="true" />
+      <Column Name="PAY_CARD_CD_ID1" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="PAY_CARD_ID1" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="PAY_CARD_NAME1" Type="System.String" DbType="VarChar(60)" CanBeNull="true" />
+      <Column Name="PAY_CARD2" Type="System.Decimal" DbType="Decimal(15,2)" CanBeNull="true" />
+      <Column Name="PAY_CARD_CD_ID2" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="PAY_CARD_ID2" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="PAY_CARD_NAME2" Type="System.String" DbType="VarChar(60)" CanBeNull="true" />
+      <Column Name="RF_IV_DOCNO" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="RF_IV_RMVALUE" Type="System.Decimal" DbType="Decimal(15,2)" CanBeNull="true" />
+      <Column Name="RF_RIGHTAMT" Type="System.Decimal" DbType="Decimal(15,2)" CanBeNull="true" />
+      <Column Name="RF_DIFAMT" Type="System.Decimal" DbType="Decimal(15,2)" CanBeNull="true" />
+      <Column Name="TAG_F" Type="System.Decimal" DbType="Decimal(15,2)" CanBeNull="true" />
+      <Column Name="TAG_S" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Association Name="POS_PT_POS_PI" Member="POS_PIs" ThisKey="WH_ID,TMCODE,ABBNO,PTDATE" OtherKey="WH_ID,TMCODE,ABBNO,PTDATE" Type="POS_PI" />
+      <Association Name="POS_PT_POS_PT_PR" Member="POS_PT_PRs" ThisKey="WH_ID,TMCODE,ABBNO,PTDATE" OtherKey="WH_ID,TMCODE,ABBNO,PTDATE" Type="POS_PT_PR" />
+    </Type>
+  </Table>
+  <Table Name="dbo.POS_PT_PR" Member="POS_PT_PRs">
+    <Type Name="POS_PT_PR">
+      <Column Name="WH_ID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="TMCODE" Type="System.String" DbType="VarChar(3) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="ABBNO" Type="System.String" DbType="VarChar(5) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="PTDATE" Type="System.DateTime" DbType="DateTime NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="PRCODE" Type="System.String" DbType="VarChar(20) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="ITEMNO" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="SORTNO" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="CVC_NO" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="DVAL" Type="System.Decimal" DbType="Decimal(15,2)" CanBeNull="true" />
+      <Column Name="DTYPE" Type="System.String" DbType="VarChar(1)" CanBeNull="true" />
+      <Column Name="TOTALB4DISC" Type="System.Decimal" DbType="Decimal(15,2)" CanBeNull="true" />
+      <Column Name="DISCOUNTAMT" Type="System.Decimal" DbType="Decimal(15,2)" CanBeNull="true" />
+      <Column Name="WORKDATE" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Association Name="POS_PT_POS_PT_PR" Member="POS_PT" ThisKey="WH_ID,TMCODE,ABBNO,PTDATE" OtherKey="WH_ID,TMCODE,ABBNO,PTDATE" Type="POS_PT" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.PV_None_Sync" Member="PV_None_Syncs">
+    <Type Name="PV_None_Sync">
+      <Column Name="rw" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
+      <Column Name="whcode" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Column Name="ABBNAME" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="ABBNO" Type="System.String" DbType="VarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="TMCODE" Type="System.String" DbType="VarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="WORKDATE" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Column Name="NET" Type="System.Decimal" DbType="Decimal(15,2)" CanBeNull="true" />
+      <Column Name="ptstatus" Type="System.String" DbType="VarChar(9)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.PV_POS_UL" Member="PV_POS_ULs">
+    <Type Name="PV_POS_UL">
+      <Column Name="WH_ID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ABBNO" Type="System.String" DbType="VarChar(5) NOT NULL" CanBeNull="false" />
+      <Column Name="PTDATE" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="WORKDATE" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="TMCODE" Type="System.String" DbType="VarChar(3) NOT NULL" CanBeNull="false" />
+      <Column Name="UFLAG" Type="System.String" DbType="VarChar(1) NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.MAS_WH" Member="MAS_WHs">
+    <Type Name="MAS_WH">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="WHCODE" Type="System.String" DbType="VarChar(10) NOT NULL" CanBeNull="false" />
+      <Column Name="ABBNAME" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="FULLNAME" Type="System.String" DbType="VarChar(100)" CanBeNull="true" />
+      <Column Name="SG_ID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="COMPANYNAME" Type="System.String" DbType="VarChar(100)" CanBeNull="true" />
+      <Column Name="ADDR_ROW1" Type="System.String" DbType="VarChar(80)" CanBeNull="true" />
+      <Column Name="ADDR_ROW2" Type="System.String" DbType="VarChar(80)" CanBeNull="true" />
+      <Column Name="ADDR_PROVINCE" Type="System.String" DbType="VarChar(30)" CanBeNull="true" />
+      <Column Name="ADDR_ZIPCODE" Type="System.String" DbType="VarChar(5)" CanBeNull="true" />
+      <Column Name="ADDR_TEL" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="ADDR_FAX" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="TAXID" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Column Name="OPENDATE" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="LINK_DATE" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="LINK_IN" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="LINK_OUT" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="LINK_STATUS" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Column Name="TMP_TARGET" Type="System.Decimal" DbType="Decimal(15,2)" CanBeNull="true" />
+      <Column Name="INSTALLPOS" Type="System.String" DbType="VarChar(1) NOT NULL" CanBeNull="false" />
+      <Column Name="POS_WHTYPE" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="POS_REPEATSTCODE" Type="System.String" DbType="VarChar(1)" CanBeNull="true" />
+      <Column Name="POS_CUSTDLG" Type="System.String" DbType="VarChar(1)" CanBeNull="true" />
+      <Column Name="POS_PRINTMT" Type="System.String" DbType="VarChar(1)" CanBeNull="true" />
+      <Column Name="POS_SHOWSALESAMTBYST" Type="System.String" DbType="VarChar(1)" CanBeNull="true" />
+      <Column Name="POS_GETPTREFNO" Type="System.String" DbType="VarChar(1)" CanBeNull="true" />
+      <Column Name="POS_ROUNDTYPE" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="POS_MAXSHIFTNO" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="POS_CN" Type="System.String" DbType="VarChar(1)" CanBeNull="true" />
+      <Column Name="POS_TIMEOPENING" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="POS_TIMECLOSING" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="POS_PWONPRINT" Type="System.String" DbType="VarChar(1)" CanBeNull="true" />
+      <Column Name="UPDATEDT" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Function Name="dbo.PF_GET_SALES" Method="PF_GET_SALES" IsComposable="true">
+    <ElementType Name="PF_GET_SALESResult">
+      <Column Name="Ncnt" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Ycnt" Type="System.Int32" DbType="Int" CanBeNull="true" />
+    </ElementType>
+  </Function>
+</Database>
