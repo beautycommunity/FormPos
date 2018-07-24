@@ -16,7 +16,7 @@ namespace ShutdownPos
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new frmShutdown());
+            Application.Run(new frmMain());
         }
     }
 }

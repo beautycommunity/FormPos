@@ -18,6 +18,8 @@ using Newtonsoft.Json;
 using RestSharp;
 using RestSharp.Deserializers;
 
+using System.Data.SqlClient;
+
 namespace EndOfDays
 {
     public partial class frmEOD : frmSubWithMenuButton
@@ -72,8 +74,7 @@ namespace EndOfDays
         {
             base.OnLoad(e);
         }
-
-       
+    
         private void frmEOD_Load(object sender, EventArgs e)
         {
             bgw.WorkerReportsProgress = true;
@@ -87,6 +88,11 @@ namespace EndOfDays
 
            try
             {
+               if(editPV())
+                {
+
+                }
+
                 loadData();
 
             }
@@ -195,7 +201,24 @@ namespace EndOfDays
 
            int _wh_id = cmd.DEF_LOCALs.Select(s => s.WH_ID).FirstOrDefault();
 
-            POSPTENDDAY PEnd = new POSPTENDDAY{WH_ID= _wh_id, ENDDAY="Y", ENDDAY_BY=Stcode };
+            string sbrand = "";
+            string fstr;
+            fstr = Whcode.Substring(0, 1);
+
+            if (fstr == "1" || fstr == "3")
+            {
+                sbrand = "BB";
+            }
+            else if (fstr == "5")
+            {
+                sbrand = "BC";
+            }
+            else
+            {
+                sbrand = "BM";
+            }
+
+            POSPTENDDAY PEnd = new POSPTENDDAY{WH_ID= _wh_id, ENDDAY="Y", ENDDAY_BY=Stcode,BRAND= sbrand };
 
             
             var json = JsonConvert.SerializeObject(PEnd) ;
@@ -244,38 +267,7 @@ namespace EndOfDays
 
             if (getABBNO())
             {
-                //using (var client = new HttpClient())
-                //{
-
-                //    List<Result> model = new List<Result>();
-
-                //    //client.BaseAddress = new Uri("http://5cosmeda.homeunix.com:89/ApiFromPOS/");
-                //    client.BaseAddress = new Uri("http://192.168.10.202:89/ApiFromPOS/");
-                //    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                //    var json = JsonConvert.SerializeObject(ListPOS);
-
-                //    JSONSTRING ss = new JSONSTRING();
-                //    ss.DATAJSON = json;
-
-                //    var response = client.PostAsJsonAsync("api/POS/InsertBill", ss).Result;
-                //    var jsonString = response.Content.ReadAsFormDataAsync();
-                //    jsonString.Wait();
-                //    model = JsonConvert.DeserializeObject<List<Result>>(jsonString.Result);
-
-                //    if ((int)response.StatusCode == 200)
-                //        {
-                //            upPosUL();
-                //            MessageBox.Show("สำเร็จ");
-                //        }
-                //        else
-                //        {
-                //            MessageBox.Show(response.StatusCode.ToString());
-                //        }
-
-
-                //}
-
+                
                 var restClient = new RestClient("http://5cosmeda.homeunix.com:89/ApiFromPOS/api/POS/InsertBill");
                 //var restClient = new RestClient("http://192.168.10.202/ApiFromPOS/api/POS/InsertBill");
                 var request = new RestRequest(Method.POST);
@@ -309,16 +301,17 @@ namespace EndOfDays
                     }
                     else if(item.StatusCode == "2")
                     {
-                        if (item.Messages != "Violation of PRIMARY KEY constraint 'PK_POS_PT'. Cannot insert duplicate key in object 'dbo.POS_PT'. The duplicate key value is (445, 001, 11483, Jul 17 2018 12:00AM).\r\nThe statement has been terminated.")
+                        
+                        if (item.Messages.Substring(0, 9) == "Violation" || item.Messages == "Object reference not set to an instance of an object.")
+                        {
+                            sms = item.Messages + "debug2";
+                            abl = false;
+                        }
+                        else
                         {
                             upPosUL();
                             sms = "สำเร็จ";
                             abl = true;
-                        }
-                        else
-                        {
-                            sms = item.Messages + "debug2";
-                            abl = false;
                         }
                     }
                     else
@@ -591,7 +584,6 @@ namespace EndOfDays
             return bl;
         }
 
-
         private void upPosUL()
         {
             var data = sup.POS_ULs.Where(s => s.UFLAG == "N").ToList();
@@ -612,12 +604,12 @@ namespace EndOfDays
             {
                 if (loadData()== false)
                 {
-                    sms = "ไม่สามารถ load ข้อมูล" ;
+                    sms = "ไม่สามารถ load ข้อมูลได้" ;
                 }
             }
             else
             {
-                sms = "Test1";
+                sms = "ไม่สามารถ รับ-ส่ง ข้อมูลได้ Test1";
             }
             
         }
@@ -635,6 +627,56 @@ namespace EndOfDays
                 MessageBox.Show(sms);
             }
             
+        }
+
+        private bool editPV()
+        {
+
+            bool bl = false;
+            SqlConnection conn = new SqlConnection(StrConn);
+            SqlCommand comm = new SqlCommand();
+
+            try
+            {
+                
+                string sql = @"ALTER VIEW [dbo].[PV_None_Sync]
+                            AS
+                            select ROW_NUMBER() over(order by a.abbno) rw ,c.whcode,c.ABBNAME,a.ABBNO,a.TMCODE,convert(varchar(10),a.WORKDATE,103) as WORKDATE 
+                            ,b.NET ,
+                            case when b.ptstatus = 'S' then 'บิลขาย'
+                                 when b.ptstatus = 'R' then 'บิลรับคืน'
+	                             when b.ptstatus = 'V' then 'ยกเลิก' end as ptstatus
+                            from (select wh_id,abbno,ptdate,workdate,tmcode,uflag from [dbo].[PV_POS_UL]
+                                  union all
+                                  select wh_id,abbno,ptdate,workdate,tmcode,uflag from [dbBeautyCommsupport]..pos_ul where UFLAG = 'N' ) as a
+                            left join (select wh_id,abbno,ptdate,workdate,tmcode,net,PTSTATUS from pos_pt) b ON a.WH_ID = b.WH_ID AND a.ABBNO = b.ABBNO AND a.PTDATE = b.PTDATE AND a.TMCODE = b.TMCODE
+                            left join (select id,whcode,abbname from mas_wh where id = (select wh_id from DEF_LOCAL)) c on a.WH_ID = c.id
+                            ";
+
+                comm.CommandText = sql;
+                comm.CommandTimeout = 100000;
+                comm.Connection = conn;
+
+                if (conn.State == ConnectionState.Closed)
+                {
+                    conn.Open();
+                }
+
+                comm.ExecuteNonQuery();
+
+                bl = true;
+            }
+            catch
+            {
+                bl = false;
+              
+            }
+            finally
+            {
+                conn.Close();
+            }
+
+            return bl;
         }
     }
 }

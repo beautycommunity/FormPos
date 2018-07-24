@@ -49,10 +49,6 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EndOfDays, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\EndOfDays\bin\x86\Debug\EndOfDays.dll</HintPath>
-    </Reference>
     <Reference Include="k.libary">
       <HintPath>..\..\..\..\..\..\..\project\DLL\k.libary.dll</HintPath>
     </Reference>
@@ -88,6 +84,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <None Include="app.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -97,6 +94,12 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\EndOfDays\EndOfDays.csproj">
+      <Project>{05b57a00-fe2b-47d9-bc8f-0a78c8076343}</Project>
+      <Name>EndOfDays</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
