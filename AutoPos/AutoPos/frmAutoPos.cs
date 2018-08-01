@@ -68,16 +68,21 @@ namespace AutoPos
         public frmAutoPos()
         {
             InitializeComponent();
-            StrConn = "Data Source=(local)\\sqlexpress;Initial Catalog=CMD-FX;User ID=sa;password=0000";
-            StrConnSup = "Data Source=(local)\\sqlexpress;Initial Catalog=dbBeautycommsupport;User ID=sa;password=0000";
-            ////StrConn = "Data Source=AYUD2.DYNDNS.info,1401;Initial Catalog=CMD-FX;User ID=sa;password=0000";
-            ////StrConnSup = "Data Source=AYUD2.DYNDNS.info,1401;Initial Catalog=dbBeautycommsupport;User ID=sa;password=0000";
+            //StrConn = "Data Source=(local)\\sqlexpress;Initial Catalog=CMD-FX;User ID=sa;password=0000";
+            //StrConnSup = "Data Source=(local)\\sqlexpress;Initial Catalog=dbBeautycommsupport;User ID=sa;password=0000";
+            //StrConn = "Data Source=AYUD2.DYNDNS.info,1401;Initial Catalog=CMD-FX;User ID=sa;password=0000";
+            //StrConnSup = "Data Source=AYUD2.DYNDNS.info,1401;Initial Catalog=dbBeautycommsupport;User ID=sa;password=0000";
 
-            Whcode = "";
+            //Whcode = "";
             //StrConn = "Data Source=.;Initial Catalog=CMD-FX;User ID=sa;password=1Q2w3e4r@";
             //StrConnSup = "Data Source=.;Initial Catalog=dbBeautycommsupport;User ID=sa;password=1Q2w3e4r@";
+
             //Whcode = "1006";
 
+            clsXML cs = new clsXML();
+            StrConn = cs.getLocalStr();
+            StrConnSup = cs.getSupStr();
+            Whcode = "";
             getText();
         }
 
@@ -168,7 +173,7 @@ namespace AutoPos
                                     }
                                     else
                                     {
-                                        upPosUL();
+                                        upPosUL(abn);
                                         uplog(Whcode, "4" + "SUCCESS");
                                     }
                                 }
@@ -198,7 +203,7 @@ namespace AutoPos
             }
             catch(Exception ex)
             {
-                uplog(Whcode, "4" + ex.Message);
+                uplog(Whcode, "7" + ex.Message);
             }
             
         }
@@ -510,7 +515,11 @@ namespace AutoPos
             tm.Stop();
 
             autoSend();
-            //tm.Interval = getTime() * 60000;
+            ////tm.Interval = getTime() * 60000;
+            //
+            //clsXML cs = new clsXML();
+            //cs.getLocalStr();
+
             tm.Start();
         }
 
@@ -556,18 +565,18 @@ namespace AutoPos
         private void setPath()
         {
             
-            string pas = Application.StartupPath;
-            string sourcePath = pas;
-            //string destinationPath = @"C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup";
-            string destinationPath = Environment.GetFolderPath(Environment.SpecialFolder.Startup);
-            string sourceFileName = "AutoPos.lnk";//eny tipe of file
-            string sourceFile = System.IO.Path.Combine(sourcePath, sourceFileName);
-            string destinationFile = System.IO.Path.Combine(destinationPath, sourceFileName);
+            //string pas = Application.StartupPath;
+            //string sourcePath = pas;
+            ////string destinationPath = @"C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup";
+            //string destinationPath = Environment.GetFolderPath(Environment.SpecialFolder.Startup);
+            //string sourceFileName = "AutoPos.lnk";//eny tipe of file
+            //string sourceFile = System.IO.Path.Combine(sourcePath, sourceFileName);
+            //string destinationFile = System.IO.Path.Combine(destinationPath, sourceFileName);
 
-            if (!System.IO.Directory.Exists(destinationFile))
-            {
-                System.IO.File.Copy(sourceFile, destinationFile, true);
-            }
+            //if (!System.IO.Directory.Exists(destinationFile))
+            //{
+            //    System.IO.File.Copy(sourceFile, destinationFile, true);
+            //}
            
         }
 
@@ -578,6 +587,11 @@ namespace AutoPos
             string _whcode = cmd.MAS_WHs.Where(s=>s.ID == _wh_id).Select(s=>s.WHCODE).FirstOrDefault();
 
             Whcode = _whcode;
+        }
+
+        private void getConnStr()
+        {
+
         }
 
 

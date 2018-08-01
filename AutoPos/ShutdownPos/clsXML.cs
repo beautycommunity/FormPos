@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 
-namespace AutoPos
+namespace ShutdownPos
 {
     class clsXML
     {
@@ -30,7 +30,7 @@ namespace AutoPos
 
             string strlocal = "";
 
-            string _localpos_servername="";
+            string _localpos_servername = "";
             string _localpos_port = "";
             string _localpos_dbname = "";
             string _localpos_userid = "";
@@ -56,7 +56,7 @@ namespace AutoPos
 
             }
 
-            if (_localpos_servername!= "")
+            if (_localpos_servername != "")
             {
                 strlocal = "Data Source=" + _localpos_servername + "," + _localpos_port + "; Initial Catalog=" + _localpos_dbname + ";User ID=" + _localpos_userid + ";password=" + _localpos_userpass;
             }
@@ -64,7 +64,7 @@ namespace AutoPos
             {
                 strlocal = "Data Source=(local)\\sqlexpress;Initial Catalog=CMD-FX;User ID=sa;password=0000";
             }
-            
+
 
 
             return strlocal;

@@ -29,9 +29,7 @@ namespace ShutdownPos
         string sms;
         CultureInfo us = CultureInfo.GetCultureInfo("en-US");
 
-        frmUpdateProgress frmpro = new frmUpdateProgress();
-        string smsUpdate = "";
-
+    
         //List<POS> ListPOS;
         //List<POSPIS> ListPI;
         //List<POSPTPRS> ListPTPR;
@@ -40,26 +38,31 @@ namespace ShutdownPos
         CMDDataContext cmd = new CMDDataContext();
         SUPDataContext sup = new SUPDataContext();
 
-        protected override void OnLoad(EventArgs e)
-        {
+        //protected override void OnLoad(EventArgs e)
+        //{
            
-        }
+        //}
 
         public frmShutdown()
         {
             InitializeComponent();
-            StrConn = "Data Source=(local)\\sqlexpress;Initial Catalog=CMD-FX;User ID=sa;password=0000";
-            StrConnSup = "Data Source=(local)\\sqlexpress;Initial Catalog=dbBeautycommsupport;User ID=sa;password=0000";
+            //StrConn = "Data Source=(local)\\sqlexpress;Initial Catalog=CMD-FX;User ID=sa;password=0000";
+            //StrConnSup = "Data Source=(local)\\sqlexpress;Initial Catalog=dbBeautycommsupport;User ID=sa;password=0000";
             ////StrConn = "Data Source=AYUD2.DYNDNS.info,1401;Initial Catalog=CMD-FX;User ID=sa;password=0000";
             ////StrConnSup = "Data Source=AYUD2.DYNDNS.info,1401;Initial Catalog=dbBeautycommsupport;User ID=sa;password=0000";
 
-            Whcode = "";
-            Stcode = "2558";
+            //Whcode = "";
+            //Stcode = "2558";
             //StrConn = "Data Source=.;Initial Catalog=CMD-FX;User ID=sa;password=1Q2w3e4r@";
             //StrConnSup = "Data Source=.;Initial Catalog=dbBeautycommsupport;User ID=sa;password=1Q2w3e4r@";
             //Whcode = "1006";
 
-            
+            clsXML cs = new clsXML();
+            StrConn = cs.getLocalStr();
+            StrConnSup = cs.getSupStr();
+            Whcode = "";
+            Stcode = "2558";
+
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
