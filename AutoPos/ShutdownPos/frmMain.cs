@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 using k.libary;
+using RestSharp;
 
 namespace ShutdownPos
 {
@@ -18,6 +19,8 @@ namespace ShutdownPos
     {
         frmUpdateProgress frmpro = new frmUpdateProgress();
         string smsUpdate = "";
+
+        ClsLog clog = new ClsLog();
 
         protected override void OnLoad(EventArgs e)
         {
@@ -48,7 +51,7 @@ namespace ShutdownPos
 
         private void frmMain_Load(object sender, EventArgs e)
         {
-
+            clog.WriteLog(DateTime.Now.ToString() + " >> Open");
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -58,6 +61,7 @@ namespace ShutdownPos
 
         private void btnRestart_Click(object sender, EventArgs e)
         {
+
             if (MessageBox.Show("คุณต้องการรีสตาร์ทเครื่องคอมใช่หรือไม่ ? ", "Restart", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 Process.Start("shutdown", "/r /f /t 0");
@@ -268,6 +272,21 @@ namespace ShutdownPos
             {
                 MessageBox.Show("TEST");
             }
+        }
+
+        public void SendLog(string _whcode, string _sms)
+        {
+            var restBranch = new RestClient("http://5cosmeda.homeunix.com:89/ApiFromPOS/api/POS/TransLogPos?WHCODE=" + _whcode + "&WORKDATE=2018.08.08&SMS=" + _sms);
+
+            var reqBranch = new RestRequest(Method.GET);
+            reqBranch.RequestFormat = DataFormat.Json;
+
+            var resBranch = restBranch.Execute(reqBranch);
+        }
+
+        private void frmMain_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            clog.WriteLog(DateTime.Now.ToString() + " >> CLOSE");
         }
     }
 }

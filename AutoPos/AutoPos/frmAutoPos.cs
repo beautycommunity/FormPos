@@ -16,6 +16,8 @@ using Newtonsoft.Json.Linq;
 using System.Globalization;
 using Newtonsoft.Json;
 using System.Deployment.Application;
+using RestSharp;
+using System.Threading;
 
 namespace AutoPos
 {
@@ -35,6 +37,7 @@ namespace AutoPos
         //List<POSPIS> ListPI = new List<POSPIS>();
         //List<POSPTPRS> ListPTPR = new List<POSPTPRS>();
 
+        ClsLog clog = new ClsLog();
 
         CMDDataContext cmd = new CMDDataContext();
         POSULDataContext sup = new POSULDataContext();
@@ -57,10 +60,12 @@ namespace AutoPos
                     UpdateApplication();
 
                 }
+                
             }
             catch (Exception ex)
             {
                MessageBox.Show(ex.Message);
+               
             }
             base.OnLoad(e);
         }
@@ -70,8 +75,8 @@ namespace AutoPos
             InitializeComponent();
             //StrConn = "Data Source=(local)\\sqlexpress;Initial Catalog=CMD-FX;User ID=sa;password=0000";
             //StrConnSup = "Data Source=(local)\\sqlexpress;Initial Catalog=dbBeautycommsupport;User ID=sa;password=0000";
-            //StrConn = "Data Source=AYUD2.DYNDNS.info,1401;Initial Catalog=CMD-FX;User ID=sa;password=0000";
-            //StrConnSup = "Data Source=AYUD2.DYNDNS.info,1401;Initial Catalog=dbBeautycommsupport;User ID=sa;password=0000";
+            //StrConn = "Data Source=BCISP.DYNDNS.info,1401;Initial Catalog=CMD-FX;User ID=sa;password=0000";
+            //StrConnSup = "Data Source=BCISP.DYNDNS.info,1401;Initial Catalog=dbBeautycommsupport;User ID=sa;password=0000";
 
             //Whcode = "";
             //StrConn = "Data Source=.;Initial Catalog=CMD-FX;User ID=sa;password=1Q2w3e4r@";
@@ -104,19 +109,36 @@ namespace AutoPos
         private void frmMain_Load(object sender, EventArgs e)
         {
             //setPath();
-           
-            cmd.Connection.ConnectionString = StrConn;
-            sup.Connection.ConnectionString = StrConnSup;
-
-            if(Whcode == "")
+            try
             {
-                setWhcode();
-            }
-            label1.Text = Whcode;
-            Displaynotify();
-            this.ShowInTaskbar = false;
-            tm.Start();
+                clog.WriteLog(DateTime.Now.ToString() + " >> OPEN");
+                cmd.Connection.ConnectionString = StrConn;
+                sup.Connection.ConnectionString = StrConnSup;
 
+                Thread.Sleep(3000);
+                if (Whcode == "")
+                {
+                    setWhcode();
+                }
+                else
+                {
+                    label1.Text = "";
+                } 
+                
+                Displaynotify();
+                this.ShowInTaskbar = false;
+
+
+            }
+            catch (Exception ex)
+            {
+                clog.WriteLog(DateTime.Now.ToString() + " >> "+ ex.Message);
+            }
+            finally
+            {
+                tm.Start();
+            }
+           
         }
 
         private void autoSend()
@@ -163,34 +185,40 @@ namespace AutoPos
                                     upPosUL(abn);
                                     //upPosUL();
                                     uplog(Whcode, "3" + sms);
+                                   
                                 }
                                 else if (sta == 2)
                                 {
                                     if (sms.Substring(1,9) == "Violation" || sms == "Object reference not set to an instance of an object.")
                                     {
+
                                         
-                                        uplog(Whcode, "5" + sms);
+                                       uplog(Whcode, "5" + sms);
+                                       
                                     }
                                     else
                                     {
                                         upPosUL(abn);
-                                        uplog(Whcode, "4" + "SUCCESS");
+                                        uplog(Whcode, "4" + "Success");
+                                        
                                     }
                                 }
                                 else
                                 {
                                     uplog(Whcode, "2" + sms);
+                                    
                                 }
                             }
                             else
                             {
                                 uplog(Whcode, "1"+response.StatusCode.ToString());
-
+                                
                             }
                         }
                         else
                         {
                             uplog(Whcode, "No bill");
+                           
                         }
                         
 
@@ -199,11 +227,13 @@ namespace AutoPos
                 else
                 {
                     uplog(Whcode, "No bill");
+                   
                 }
             }
             catch(Exception ex)
             {
                 uplog(Whcode, "7" + ex.Message);
+               
             }
             
         }
@@ -251,8 +281,8 @@ namespace AutoPos
             catch(Exception ex)
             {
                 uplog(Whcode, "5" + ex.Message);
-                //MessageBox.Show(ex.Message);
-                bl = false;
+               
+               bl = false;
             }
             
             return bl;
@@ -426,7 +456,6 @@ namespace AutoPos
 
         }
 
-
         protected void Displaynotify()
         {
             try
@@ -488,24 +517,35 @@ namespace AutoPos
             try
             {
                 tm.Stop();
+
+                if (Whcode == "")
+                {
+                    setWhcode();
+                }
+
                 clsXML cs = new clsXML();
                 cs.setXML();
                 int tt = getTime();
                 if (tt > 0)
                 {
-                    tm.Interval = getTime() * 60000;
+                    tm.Interval = tt * 60000;
                     autoSend();
                 }
                 else
                 {
                     uplog(Whcode, "time = 0");
+                    
                 }
 
-                tm.Start();
             }
             catch(Exception ex)
             {
                 uplog(Whcode, ex.Message);
+               
+            }
+            finally
+            {
+                tm.Start();
             }
            
         }
@@ -514,12 +554,12 @@ namespace AutoPos
         {
             tm.Stop();
 
+            if (Whcode == "")
+            {
+                setWhcode();
+            }
             autoSend();
-            ////tm.Interval = getTime() * 60000;
-            //
-            //clsXML cs = new clsXML();
-            //cs.getLocalStr();
-
+           
             tm.Start();
         }
 
@@ -560,6 +600,8 @@ namespace AutoPos
 
             sup.trn_log_pos.InsertOnSubmit(lp);
             sup.SubmitChanges();
+
+            SendLog(_whcode, _sms);
         }
 
         private void setPath()
@@ -583,10 +625,20 @@ namespace AutoPos
 
         private void setWhcode()
         {
-            int _wh_id = cmd.DEF_LOCALs.Select(s => s.WH_ID).FirstOrDefault();
-            string _whcode = cmd.MAS_WHs.Where(s=>s.ID == _wh_id).Select(s=>s.WHCODE).FirstOrDefault();
+            try
+            {
+                int _wh_id = cmd.DEF_LOCALs.Select(s => s.WH_ID).FirstOrDefault();
+                string _whcode = cmd.MAS_WHs.Where(s => s.ID == _wh_id).Select(s => s.WHCODE).FirstOrDefault();
 
-            Whcode = _whcode;
+                Whcode = _whcode;
+
+                label1.Text = Whcode;
+            }
+            catch(Exception ex)
+            {
+                uplog(Whcode, ex.Message);
+            }
+            
         }
 
         private void getConnStr()
@@ -761,7 +813,6 @@ namespace AutoPos
             }
         }
 
-
         public void showProgrssBar()
         {
             ////สร้างออบเจ็กต์ ใหม่ให้ตัวแปร frmProgress
@@ -780,6 +831,22 @@ namespace AutoPos
         }
 
         #endregion
+
+        public void SendLog(string _whcode, string _sms)
+        {
+            var restBranch = new RestClient("http://5cosmeda.homeunix.com:89/ApiFromPOS/api/POS/TransLogPos?WHCODE="+_whcode+"&WORKDATE=2018.08.08&SMS="+_sms);
+
+            var reqBranch = new RestRequest(Method.GET);
+            reqBranch.RequestFormat = DataFormat.Json;
+
+            var resBranch = restBranch.Execute(reqBranch);
+        }
+
+        private void frmAutoPos_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            clog.WriteLog(DateTime.Now.ToString() + " >> CLOSE");
+            uplog(Whcode, "CLOSE");
+        }
     }
 
 

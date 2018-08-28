@@ -29,7 +29,8 @@ namespace ShutdownPos
         string sms;
         CultureInfo us = CultureInfo.GetCultureInfo("en-US");
 
-    
+        ClsLog clog = new ClsLog();
+
         //List<POS> ListPOS;
         //List<POSPIS> ListPI;
         //List<POSPTPRS> ListPTPR;
@@ -72,6 +73,7 @@ namespace ShutdownPos
 
         private async void frmShutdown_Load(object sender, EventArgs e)
         {
+            clog.WriteLog(DateTime.Now.ToString() + " >> Shut Down");
             cmd.Connection.ConnectionString = StrConn;
             sup.Connection.ConnectionString = StrConnSup;
 
@@ -577,6 +579,8 @@ namespace ShutdownPos
 
             sup.trn_log_pos.InsertOnSubmit(lp);
             sup.SubmitChanges();
+
+            SendLog(_whcode, _sms);
         }
 
         private void setWhcode()
@@ -592,6 +596,19 @@ namespace ShutdownPos
             Process.Start("shutdown", "/s /f /t 0");
         }
 
-       
+        public void SendLog(string _whcode, string _sms)
+        {
+            var restBranch = new RestClient("http://5cosmeda.homeunix.com:89/ApiFromPOS/api/POS/TransLogPos?WHCODE=" + _whcode + "&WORKDATE=2018.08.08&SMS=" + _sms);
+
+            var reqBranch = new RestRequest(Method.GET);
+            reqBranch.RequestFormat = DataFormat.Json;
+
+            var resBranch = restBranch.Execute(reqBranch);
+        }
+
+        private void frmShutdown_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            clog.WriteLog(DateTime.Now.ToString() + " >> CLOSE");
+        }
     }
 }

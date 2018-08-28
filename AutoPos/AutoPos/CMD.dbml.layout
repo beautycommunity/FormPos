@@ -34,16 +34,16 @@
         <classShapeMoniker Id="a7a98d21-79bf-434d-96b1-0b4c67db07a1" />
       </nodes>
     </associationConnector>
-    <classShape Id="208afbef-10fe-4bad-9e46-adfe42614baa" absoluteBounds="6.375, 2.5, 2, 1.9631982421875">
+    <classShape Id="208afbef-10fe-4bad-9e46-adfe42614baa" absoluteBounds="6.25, 3.375, 2, 1.9631982421875">
       <DataClassMoniker Name="/CMDDataContext/PV_POS_UL" />
       <nestedChildShapes>
-        <elementListCompartment Id="841081cb-d7fe-4df7-be3f-39db727465dc" absoluteBounds="6.3900000000000006, 2.96, 1.9700000000000002, 1.4031982421875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="841081cb-d7fe-4df7-be3f-39db727465dc" absoluteBounds="6.2650000000000006, 3.835, 1.9700000000000002, 1.4031982421875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <classShape Id="b3384ffe-edd9-4e9b-b8d3-921b1d38af82" absoluteBounds="6, 1.125, 2, 2.7324039713541666">
+    <classShape Id="b3384ffe-edd9-4e9b-b8d3-921b1d38af82" absoluteBounds="5.25, 0.625, 2, 2.7324039713541666">
       <DataClassMoniker Name="/CMDDataContext/DEF_LOCAL" />
       <nestedChildShapes>
-        <elementListCompartment Id="1c43611e-bb86-4021-bade-8a8bdf8c0b42" absoluteBounds="6.015, 1.585, 1.9700000000000002, 2.1724039713541665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="1c43611e-bb86-4021-bade-8a8bdf8c0b42" absoluteBounds="5.265, 1.085, 1.9700000000000002, 2.1724039713541665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
     <classShape Id="35999573-3aca-48e0-be03-dbbf27c7e616" absoluteBounds="6.75, 6, 2, 7.1553369140625">

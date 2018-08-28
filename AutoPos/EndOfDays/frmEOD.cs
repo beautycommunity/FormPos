@@ -624,8 +624,11 @@ namespace EndOfDays
         {
             if(sms!="")
             {
+
                 MessageBox.Show(sms);
             }
+
+            SendLog(Whcode,sms);
             
         }
 
@@ -677,6 +680,16 @@ namespace EndOfDays
             }
 
             return bl;
+        }
+
+        public void SendLog(string _whcode, string _sms)
+        {
+            var restBranch = new RestClient("http://5cosmeda.homeunix.com:89/ApiFromPOS/api/POS/TransLogPos?WHCODE=" + _whcode + "&WORKDATE=2018.08.08&SMS=" + _sms);
+
+            var reqBranch = new RestRequest(Method.GET);
+            reqBranch.RequestFormat = DataFormat.Json;
+
+            var resBranch = restBranch.Execute(reqBranch);
         }
     }
 }

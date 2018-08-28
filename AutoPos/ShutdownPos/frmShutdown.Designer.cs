@@ -77,6 +77,7 @@
             this.Name = "frmShutdown";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Shut down";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.frmShutdown_FormClosed);
             this.Load += new System.EventHandler(this.frmShutdown_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
