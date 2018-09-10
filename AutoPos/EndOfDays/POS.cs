@@ -20,7 +20,7 @@ namespace EndOfDays
     public class POSPTENDDAY
     {
         public int WH_ID { get; set; }
-        public DateTime ENDDAY_DATE { get; set; }
+        public string ENDDAY_DATE { get; set; }
         public string ENDDAY_BY { get; set; }
         public string ENDDAY { get; set; }
         public string BRAND { get; set; }

@@ -18,6 +18,7 @@ using Newtonsoft.Json;
 using System.Deployment.Application;
 using RestSharp;
 using System.Threading;
+using RestSharp.Deserializers;
 
 namespace AutoPos
 {
@@ -32,6 +33,7 @@ namespace AutoPos
         string StrConn;
         string StrConnSup;
         string Whcode;
+        int yesterday;
 
         List<POS> ListPOS = new List<POS>();
         //List<POSPIS> ListPI = new List<POSPIS>();
@@ -70,6 +72,7 @@ namespace AutoPos
             base.OnLoad(e);
         }
 
+
         public frmAutoPos()
         {
             InitializeComponent();
@@ -89,6 +92,7 @@ namespace AutoPos
             StrConnSup = cs.getSupStr();
             Whcode = "";
             getText();
+            yesterday = 0;
         }
 
         public frmAutoPos(string _strconn, string _strconnSup, string _whcode)
@@ -97,6 +101,8 @@ namespace AutoPos
             StrConn = _strconn;
             StrConnSup = _strconnSup;
             Whcode = _whcode;
+            yesterday = 0;
+
         }
 
         private void btnOk_Click(object sender, EventArgs e)
@@ -111,11 +117,12 @@ namespace AutoPos
             //setPath();
             try
             {
+                Thread.Sleep(5000);
                 clog.WriteLog(DateTime.Now.ToString() + " >> OPEN");
                 cmd.Connection.ConnectionString = StrConn;
                 sup.Connection.ConnectionString = StrConnSup;
+                yesterday = 0;
 
-                Thread.Sleep(3000);
                 if (Whcode == "")
                 {
                     setWhcode();
@@ -456,6 +463,174 @@ namespace AutoPos
 
         }
 
+        private void getList(string _ytd,int _wh_id, string _tmcode, DateTime _workdate, string _abbno)
+        {
+
+            var sql_pt = cmd.POS_PTs.Where(s => s.WH_ID == _wh_id && s.WORKDATE == _workdate && s.TMCODE == _tmcode && s.ABBNO == _abbno).FirstOrDefault();
+
+            var sql_pi = cmd.POS_PIs.Where(s => s.WH_ID == _wh_id && s.WORKDATE == _workdate && s.TMCODE == _tmcode && s.ABBNO == _abbno).ToList();
+
+            var sql_pr = cmd.POS_PT_PRs.Where(s => s.WH_ID == _wh_id && s.WORKDATE == _workdate && s.TMCODE == _tmcode && s.ABBNO == _abbno).ToList();
+
+            List<POSPIS> ListPI = new List<POSPIS>();
+            List<POSPTPRS> ListPTPR = new List<POSPTPRS>();
+
+            POSPTS pt = new POSPTS
+            {
+                WH_ID = sql_pt.WH_ID,
+                TMCODE = sql_pt.TMCODE,
+                ABBNO = sql_pt.ABBNO,
+                PTDATE = sql_pt.PTDATE,
+                PTTIME = sql_pt.PTTIME,
+                SHIFTNO = sql_pt.SHIFTNO,
+                PTSTATUS = sql_pt.PTSTATUS,
+                OCSTATUS = sql_pt.OCSTATUS,
+                WORKDATE = sql_pt.WORKDATE,
+                ST_ID_LOG = sql_pt.ST_ID_LOG,
+                ST_ID = sql_pt.ST_ID,
+                IV_DOCNO = sql_pt.IV_DOCNO,
+                CN_DOCNO = sql_pt.CN_DOCNO,
+                REFNO = sql_pt.REFNO,
+                CT_ID = sql_pt.CT_ID,
+                CT_BILL_TO = sql_pt.CT_BILL_TO,
+                CT_BILL_ADDR1 = sql_pt.CT_BILL_ADDR1,
+                CT_BILL_ADDR2 = sql_pt.CT_BILL_ADDR2,
+                CT_BILL_ADDR3 = sql_pt.CT_BILL_ADDR3,
+                CT_CARDID = sql_pt.CT_CARDID,
+                CTTYPE = sql_pt.CTTYPE,
+                CTCAT = sql_pt.CTCAT,
+                CO_ID = sql_pt.CO_ID,
+                CO_CARDID = sql_pt.CO_CARDID,
+                POINT = sql_pt.POINT,
+                POINT_TOTAL = sql_pt.POINT_TOTAL,
+                SDPCODE = sql_pt.SDPCODE,
+                PRCODE = sql_pt.PRCODE,
+                REMARK = sql_pt.REMARK,
+                VATTYPE = sql_pt.VATTYPE,
+                VATRATE = sql_pt.VATRATE,
+                QTY = sql_pt.QTY,
+                SUMMARY = sql_pt.SUMMARY,
+                ITEMDISCOUNT = sql_pt.ITEMDISCOUNT,
+                SUBTOTAL = sql_pt.SUBTOTAL,
+                SUBTOTAL_NORM = sql_pt.SUBTOTAL_NORM,
+                DISCOUNTSTR = sql_pt.DISCOUNTSTR,
+                DISCOUNTAMT = sql_pt.DISCOUNTAMT,
+                DISCOUNTAMT_VAT = sql_pt.DISCOUNTAMT_VAT,
+                TOTAL = sql_pt.TOTAL,
+                TOTAL_VAT = sql_pt.TOTAL_VAT,
+                VATAMT = sql_pt.VATAMT,
+                ROUNDAMT = sql_pt.ROUNDAMT,
+                NET = sql_pt.NET,
+                VAL = sql_pt.VAL,
+                PAY_OTHER = sql_pt.PAY_OTHER,
+                PAY_CASH = sql_pt.PAY_CASH,
+                PAY_CASH_TENDER = sql_pt.PAY_CASH_TENDER,
+                PAY_CARD1 = sql_pt.PAY_CARD1,
+                PAY_CARD_CD_ID1 = sql_pt.PAY_CARD_CD_ID1,
+                PAY_CARD_ID1 = sql_pt.PAY_CARD_ID1,
+                PAY_CARD_NAME1 = sql_pt.PAY_CARD_NAME1,
+                PAY_CARD2 = sql_pt.PAY_CARD2,
+                PAY_CARD_CD_ID2 = sql_pt.PAY_CARD_CD_ID2,
+                PAY_CARD_ID2 = sql_pt.PAY_CARD_ID2,
+                PAY_CARD_NAME2 = sql_pt.PAY_CARD_NAME2,
+                RF_IV_DOCNO = sql_pt.RF_IV_DOCNO,
+                RF_IV_RMVALUE = sql_pt.RF_IV_RMVALUE,
+                RF_RIGHTAMT = sql_pt.RF_RIGHTAMT,
+                RF_DIFAMT = sql_pt.RF_DIFAMT,
+                TAG_F = sql_pt.TAG_F,
+                TAG_S = sql_pt.TAG_S
+            };
+
+            foreach (var item in sql_pi)
+            {
+                POSPIS pis1 = new POSPIS
+                {
+                    WH_ID = item.WH_ID,
+                    TMCODE = item.TMCODE,
+                    ABBNO = item.ABBNO,
+                    PTDATE = item.PTDATE,
+                    ITEMNO = item.ITEMNO,
+                    MP_ID = item.MP_ID,
+                    BC_ID = item.BC_ID,
+                    VATABLE = item.VATABLE,
+                    CONTROLSN = item.CONTROLSN,
+                    SH_ID = item.SH_ID,
+                    ACPRICE = item.ACPRICE,
+                    PRICENO = item.PRICENO,
+                    DPRICE = item.DPRICE,
+                    BPRICE = item.BPRICE,
+                    PRICE = item.PRICE,
+                    UM_ID = item.UM_ID,
+                    UMRATIO = item.UMRATIO,
+                    QTY = item.QTY,
+                    DISCOUNTSTR = item.DISCOUNTSTR,
+                    DISCOUNTAMT = item.DISCOUNTAMT,
+                    TOTAL = item.TOTAL,
+                    NET = item.NET,
+                    VAL = item.VAL,
+                    POINT = item.POINT,
+                    PRCODE = item.PRCODE,
+                    OFFERID = item.OFFERID,
+                    ITEMAU = item.ITEMAU,
+                    ITEMRF = item.ITEMRF,
+                    QTY_RF = item.QTY_RF,
+                    PR_TOTAL = item.PR_TOTAL,
+                    PR_NET = item.PR_NET,
+                    PR_VAL = item.PR_VAL,
+                    PIVOIDED = item.PIVOIDED,
+                    PISTATUS = item.PISTATUS,
+                    WORKDATE = item.WORKDATE,
+                    TAG_F = item.TAG_F,
+                    TAG_S = item.TAG_S
+                };
+                ListPI.Add(pis1);
+            }
+
+
+            foreach (var item in sql_pr)
+            {
+
+                POSPTPRS ptpr = new POSPTPRS
+                {
+                    WH_ID = item.WH_ID,
+                    TMCODE = item.TMCODE,
+                    ABBNO = item.ABBNO,
+                    PTDATE = item.PTDATE,
+                    PRCODE = item.PRCODE,
+                    ITEMNO = item.ITEMNO,
+                    SORTNO = item.SORTNO,
+                    CVC_NO = item.CVC_NO,
+                    DVAL = item.DVAL,
+                    DTYPE = item.DTYPE,
+                    TOTALB4DISC = item.TOTALB4DISC,
+                    DISCOUNTAMT = item.DISCOUNTAMT,
+                    WORKDATE = item.WORKDATE
+                };
+                ListPTPR.Add(ptpr);
+            }
+
+            string brand = "";
+            string fstr;
+            fstr = Whcode.Substring(0, 1);
+
+            if (fstr == "1" || fstr == "3")
+            {
+                brand = "BB";
+            }
+            else if (fstr == "5")
+            {
+                brand = "BC";
+            }
+            else
+            {
+                brand = "BM";
+            }
+
+            POS pos = new POS { POSPT = pt, POSPI = ListPI, POSPTPR = ListPTPR,ENDDAY_DATE = _ytd ,CREATEBY = Whcode, ENDDAY = "Y", BRAND = brand };
+            ListPOS.Add(pos);
+
+        }
+        
         protected void Displaynotify()
         {
             try
@@ -467,7 +642,7 @@ namespace AutoPos
                 ntf.BalloonTipText = "POS SYNC";
                 ntf.ShowBalloonTip(50);
             }
-            catch (Exception ex)
+            catch 
             {
 
             }
@@ -504,7 +679,7 @@ namespace AutoPos
                 var response = client.GetAsync("api/POS/TimeSync?WHCODE="+Whcode).Result;
                 var details = JObject.Parse(response.Content.ReadAsStringAsync().Result);
 
-               res= Convert.ToInt32(details["Results"]["WHTIME"]);
+               res= Convert.ToInt32(details["Results"]["whtime"]);
 
             }
 
@@ -526,7 +701,17 @@ namespace AutoPos
                 clsXML cs = new clsXML();
                 cs.setXML();
                 int tt = getTime();
-                if (tt > 0)
+
+                if(yesterday == 0)
+                {
+                    if(sendYesterday())
+                    {
+                        yesterday = 0;
+                    }
+
+                }
+
+                if (tt != 0)
                 {
                     tm.Interval = tt * 60000;
                     autoSend();
@@ -845,7 +1030,287 @@ namespace AutoPos
         private void frmAutoPos_FormClosed(object sender, FormClosedEventArgs e)
         {
             clog.WriteLog(DateTime.Now.ToString() + " >> CLOSE");
-            uplog(Whcode, "CLOSE");
+            uplog(Whcode, "CLOSE AUTO POS");
+        }
+
+        private bool sendYesterday()
+        {
+            bool bl = false;
+            try
+            {
+                int cnt = 0;
+                DateTime dend;
+                DateTime dstart;
+                string strdate;
+                
+                dend = DateTime.Now;
+                dstart = DateTime.Now.AddDays(-5);
+
+                cnt = chkYesterday();
+
+               
+                if (cnt == 0)
+                {
+
+                    strdate = dend.AddDays(-1).ToString("yyyy-MM-dd");
+
+                    if (Convert.ToInt32(strdate.Substring(0, 4)) > 2550)
+                    {
+                        strdate = dend.AddYears(-543).AddDays(-1).ToString("yyyy-MM-dd");
+                    }
+                    else
+                    {
+                        strdate = dend.AddDays(-1).ToString("yyyy-MM-dd");
+                    }
+
+                    //สตรวจสอบเอกสาร
+                    int qty = 0;
+
+                    var dat = sup.POS_ULs.Where(s => s.WORKDATE < dend && s.WORKDATE >= dstart && s.UFLAG == "N").ToList();
+                    qty = dat.Count();
+
+                    if (qty == 0)
+                    {
+                        noBillSend(strdate);
+
+                    }
+                    else
+                    {
+                        // ส่งข้อมูล
+                        ListPOS.Clear();
+
+                        foreach (var item in dat)
+                        {
+                            getList(strdate, item.WH_ID, item.TMCODE, item.WORKDATE, item.ABBNO);
+                        }
+
+                        upYesterday();
+                    }
+                }
+                bl = true;
+            }
+            catch(Exception ex)
+            {
+                bl = false;
+                clog.WriteLog(DateTime.Now.ToString() + " " +  ex.Message);
+            }
+
+            return bl;
+        }
+
+        private int chkYesterday()
+        {
+            int res = 0;
+
+            string brand = "BB";
+            string fstr;
+            string strdate;
+            DateTime dd;
+            fstr = Whcode.Substring(0, 1);
+
+            if (fstr == "1" || fstr == "3")
+            {
+                brand = "BB";
+            }
+            else if (fstr == "5")
+            {
+                brand = "BC";
+            }
+            else
+            {
+                brand = "BM";
+            }
+
+            dd =Convert.ToDateTime( DateTime.Now.AddDays(-1).ToShortDateString());
+            strdate = dd.ToString("yyyy-MM-dd");
+
+            int wh_id = cmd.DEF_LOCALs.Select(s => s.WH_ID).FirstOrDefault();
+
+            if (Convert.ToInt32(strdate.Substring(0,4)) > 2550)
+            {
+                strdate = dd.AddYears(-543).ToString("yyyy-MM-dd");
+              
+            }
+            else
+            {
+                strdate = dd.ToString("yyyy-MM-dd");
+               
+            }
+            using (var client = new HttpClient())
+            {
+                //wh_id = 418;
+                //brand = "BB";
+                //strdate = "2018-09.04";
+
+                client.BaseAddress = new Uri("http://5cosmeda.homeunix.com:89/ApiFromPOS/");
+                //client.BaseAddress = new Uri("http://192.168.10.202:89/ApiFromPOS/");
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                var response = client.GetAsync(" api/POS/CheckEndDay?WHID="+ wh_id + "&BRAND="+brand+"&ENDDAYDATE=" + strdate).Result;
+                var details = JObject.Parse(response.Content.ReadAsStringAsync().Result);
+
+               if(details["Results"].ToString()=="Y")
+                {
+                    res = 1;
+                }
+               else
+                {
+                    res = 0;
+                }
+
+            }
+
+            return res;
+
+        }
+
+        private void noBillSend(string ydt)
+        {
+            string sms = "";
+            var restClient = new RestClient("http://5cosmeda.homeunix.com:89/ApiFromPOS/api/POS/InsertBill");
+            //var restClient = new RestClient("http://192.168.10.202/ApiFromPOS/api/POS/InsertBill");
+            var request = new RestRequest(Method.POST);
+            request.RequestFormat = DataFormat.Json;
+
+            int _wh_id = cmd.DEF_LOCALs.Select(s => s.WH_ID).FirstOrDefault();
+
+            string sbrand = "";
+            string fstr;
+            fstr = Whcode.Substring(0, 1);
+
+            if (fstr == "1" || fstr == "3")
+            {
+                sbrand = "BB";
+            }
+            else if (fstr == "5")
+            {
+                sbrand = "BC";
+            }
+            else
+            {
+                sbrand = "BM";
+            }
+
+            POSPTENDDAY PEnd = new POSPTENDDAY { WH_ID = _wh_id, ENDDAY = "Y",ENDDAY_DATE = ydt, ENDDAY_BY = "2558", BRAND = sbrand };
+
+
+            var json = JsonConvert.SerializeObject(PEnd);
+
+            JSONSTRING ss = new JSONSTRING();
+            ss.DATAJSON = "";
+            ss.POSENDDAY = PEnd;
+
+            //request.AddJsonBody(ss);
+
+            request.AddBody(ss);
+
+            var response = restClient.Execute(request);
+
+            JsonDeserializer deserial = new JsonDeserializer();
+
+            if ((int)response.StatusCode == 200)
+            {
+                List<Result> bl = deserial.Deserialize<List<Result>>(response);
+
+
+                var item = bl.FirstOrDefault();
+
+                if (item.StatusCode == "1")
+                {
+
+                    sms = "สำเร็จ";
+
+                }
+                else
+                {
+                    sms = item.Messages + "debug1";
+
+                }
+            }
+            else
+            {
+                sms = response.ErrorException.Message + "Pro1";
+
+            }
+
+            uplog(Whcode,"YESTERDAY:"+ sms);
+        }
+
+        private bool upYesterday()
+        {
+            bool bl = false;
+            try
+            {
+                using (var client = new HttpClient())
+                {
+
+                    int sta = 0;
+                    string sms = "";
+                    client.BaseAddress = new Uri("http://5cosmeda.homeunix.com:89/ApiFromPOS/");
+                    //client.BaseAddress = new Uri("http://192.168.10.202:89/ApiFromPOS/");
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                    var json = JsonConvert.SerializeObject(ListPOS);
+
+
+                    JSONSTRING ss = new JSONSTRING();
+                    ss.DATAJSON = json;
+
+                    var response = client.PostAsJsonAsync("api/POS/InsertBill", ss).Result;
+                    var details = JObject.Parse(response.Content.ReadAsStringAsync().Result);
+
+                    if ((int)response.StatusCode == 200)
+                    {
+                        sta = Convert.ToInt32(details["StatusCode"]);
+                        sms = details["Messages"].ToString();
+
+                        if (sta == 1)
+                        {
+                            upPosUL();
+                            //upPosUL();
+                            uplog(Whcode, "3>>YESTERDAY>>" + sms);
+
+                        }
+                        else if (sta == 2)
+                        {
+                            if (sms.Substring(1, 9) == "Violation" || sms == "Object reference not set to an instance of an object.")
+                            {
+
+                                uplog(Whcode, "5>>YESTERDAY>>" + sms);
+
+                            }
+                            else
+                            {
+                                upPosUL();
+                                uplog(Whcode, "4>>YESTERDAY>>" + "Success");
+
+                            }
+                        }
+                        else
+                        {
+                            uplog(Whcode, "2>>YESTERDAY>>" + sms);
+
+                        }
+
+                        bl = true;
+                    }
+                    else
+                    {
+                        uplog(Whcode, "1>>YESTERDAY>>" + response.StatusCode.ToString());
+                        bl = false;
+                    }
+
+                }
+
+
+
+            }
+            catch(Exception ex)
+            {
+                bl = false;
+                uplog(Whcode, "6>>YESTERDAY>>" + ex.Message);
+            }
+
+            return bl;
         }
     }
 

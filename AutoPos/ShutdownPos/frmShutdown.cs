@@ -572,15 +572,16 @@ namespace ShutdownPos
 
         private void uplog(string _whcode, string _sms)
         {
+            SendLog(_whcode, "shutdown:" + _sms);
+
             trn_log_pos lp = new trn_log_pos();
             lp.whcode = _whcode;
             lp.workdate = DateTime.Now;
-            lp.sms = "EndDay:"+_sms;
+            lp.sms = "shutdown:" + _sms;
 
             sup.trn_log_pos.InsertOnSubmit(lp);
             sup.SubmitChanges();
-
-            SendLog(_whcode, _sms);
+   
         }
 
         private void setWhcode()

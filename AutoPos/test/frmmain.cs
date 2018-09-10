@@ -20,8 +20,9 @@ namespace test
 
         private void button1_Click(object sender, EventArgs e)
         {
-            string StrConn = "Data Source=LTHY.DYNDNS.info,1401;Initial Catalog=CMD-FX;User ID=sa;password=0000";
-            string StrConnSup = "Data Source=LTHY.DYNDNS.info,1401;Initial Catalog=dbBeautycommsupport;User ID=sa;password=0000";
+           
+            string StrConn = "Data Source=.;Initial Catalog=CMD-FX;User ID=sa;password=1Q2w3e4r@";
+            string StrConnSup = "Data Source=.;Initial Catalog=dbBeautyCommSupport;User ID=sa;password=1Q2w3e4r@";
             string Whcode = "1226";
             string Stcode = "2558";
 

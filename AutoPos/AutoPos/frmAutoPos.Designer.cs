@@ -58,7 +58,7 @@
             // 
             // tm
             // 
-            this.tm.Interval = 600000;
+            this.tm.Interval = 300000;
             this.tm.Tick += new System.EventHandler(this.tm_Tick);
             // 
             // btn_test

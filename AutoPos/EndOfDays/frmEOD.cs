@@ -45,15 +45,15 @@ namespace EndOfDays
 
             //StrConn = "Data Source=(local)/sqlexpress;Initial Catalog=CMD-FX;User ID=sa;password=0000";
             //StrConnSup = "Data Source=(local)/sqlexpress;Initial Catalog=dbBeautyCommSupport;User ID=sa;password=0000";
-            StrConn = "Data Source=CENL.DYNDNS.info,1401;Initial Catalog=CMD-FX;User ID=sa;password=0000";
-            StrConnSup = "Data Source=CENL.DYNDNS.info,1401;Initial Catalog=dbBeautycommsupport;User ID=sa;password=0000";
-            Whcode = "1001";
-            Stcode = "2558";
-
-            //StrConn = "Data Source=.;Initial Catalog=CMD-FX;User ID=sa;password=1Q2w3e4r@";
-            //StrConnSup = "Data Source=.;Initial Catalog=dbBeautyCommSupport;User ID=sa;password=1Q2w3e4r@";
-            //Whcode = "1006";
+            //StrConn = "Data Source=CENL.DYNDNS.info,1401;Initial Catalog=CMD-FX;User ID=sa;password=0000";
+            //StrConnSup = "Data Source=CENL.DYNDNS.info,1401;Initial Catalog=dbBeautycommsupport;User ID=sa;password=0000";
+            //Whcode = "1001";
             //Stcode = "2558";
+
+            StrConn = "Data Source=.;Initial Catalog=CMD-FX;User ID=sa;password=1Q2w3e4r@";
+            StrConnSup = "Data Source=.;Initial Catalog=dbBeautyCommSupport;User ID=sa;password=1Q2w3e4r@";
+            Whcode = "1006";
+            Stcode = "2558";
         }
 
         public frmEOD(string _strconn, string _strconnsup, string _whcode,string _stcode)
@@ -181,14 +181,20 @@ namespace EndOfDays
                 {
 
                     noBillSend();
+                  
+                    sms = "ไม่มีบิลคงค้าง";
 
-                    MessageBox.Show("ไม่มีบิลคงค้าง");
+                   
                 }
 
             }
             catch (Exception ex)
             {
-                MessageBox.Show("เกิดข้อผิดพลาด\n" + ex.Message+"pro5");
+                sms= "เกิดข้อผิดพลาด\n" + ex.Message+"pro5";
+            }
+            finally
+            {
+                ShowSMS();
             }
         }
 
@@ -622,13 +628,15 @@ namespace EndOfDays
 
         private void ShowSMS()
         {
-            if(sms!="")
+            SendLog(Whcode, "KBEAUTY : END DAY>> "+sms);
+
+            if (sms!="")
             {
 
                 MessageBox.Show(sms);
             }
 
-            SendLog(Whcode,sms);
+           
             
         }
 

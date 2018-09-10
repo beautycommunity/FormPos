@@ -12,14 +12,33 @@ namespace AutoPos
         public POSPTS POSPT { get; set; }
         public List<POSPIS> POSPI { get; set; }
         public List<POSPTPRS> POSPTPR { get; set; }
+        public string ENDDAY_DATE { get; set; }
         public string CREATEBY { get; set; }
         public string ENDDAY { get; set; }
         public string BRAND { get; set; }
     }
 
+    public class POSPTENDDAY
+    {
+        public int WH_ID { get; set; }
+        public string ENDDAY_DATE { get; set; }
+        public string ENDDAY_BY { get; set; }
+        public string ENDDAY { get; set; }
+        public string BRAND { get; set; }
+    }
+
+    public class Result
+    {
+        public string StatusCode { get; set; }
+        public string Messages { get; set; }
+        public string Records { get; set; }
+        public string Results { get; set; }
+    }
+
     public class JSONSTRING
     {
         public string DATAJSON { get; set; }
+        public POSPTENDDAY POSENDDAY { get; set; }
     }
 
     public class POSPTS
